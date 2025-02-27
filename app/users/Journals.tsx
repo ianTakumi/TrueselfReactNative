@@ -125,6 +125,9 @@ const Journals: React.FC = () => {
           )}
         </ScrollView>
       )}
+      <TouchableOpacity className="absolute bottom-12 right-6 bg-purple-600 p-4 rounded-full shadow-lg active:bg-purple-800">
+        <MaterialIcons name="add" size={28} color="white" />
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };

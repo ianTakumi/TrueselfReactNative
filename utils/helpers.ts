@@ -1,5 +1,193 @@
 import { createNotifications } from "react-native-notificated";
 import { ImageSourcePropType } from "react-native";
+import { Song } from "@/app/redux/types/Song.type";
+import { Affirmation } from "@/app/redux/types/Affirmations.type";
+
+export const affirmations: Affirmation[] = [
+  {
+    id: 1,
+    title: "Overall Health Affirmations",
+    description:
+      "A powerful collection of affirmations designed to promote physical, mental, and emotional well-being, reinforcing a healthy and balanced lifestyle.",
+    url: "https://youtu.be/lLMVefQKyaE?si=eq59oIe04BSzIqjc",
+    image: require("@/assets/images/affirmations/a-powerful-collection-of-affirmations-designed-to.png"),
+  },
+  {
+    id: 2,
+    title: "Trauma Healing Affirmations",
+    description:
+      "A soothing set of affirmations aimed at fostering emotional resilience, healing past wounds, and promoting inner peace.",
+    url: "https://youtu.be/9H5Bre278BU?si=LWZTlcyiuyG4Lkqh",
+    image: require("@/assets/images/affirmations/a-soothing-set-of-affirmations-aimed-at-fostering.png"),
+  },
+  {
+    id: 3,
+    title: "Confidence, Success, and Wealth Affirmations",
+    description:
+      "Motivational affirmations to boost self-confidence, attract success, and cultivate a mindset of abundance and financial prosperity.",
+    url: "https://youtu.be/GvAl2Q5Oj8k?si=m2iwmamJiPBZbhlj",
+    image: require("@/assets/images/affirmations/motivational-affirmations-to-boost-self-confidence.png"),
+  },
+  {
+    id: 4,
+    title: "Happiness and Blissful Life Affirmations",
+    description:
+      "A series of uplifting affirmations to invite joy, gratitude, and fulfillment into daily life, enhancing overall happiness.",
+    url: "https://youtu.be/eMkNUWDylUY?si=mUnj9h4PBkFiVqJM",
+    image: require("@/assets/images/affirmations/a-series-of-uplifting-affirmations-to-invite-joy.png"),
+  },
+  {
+    id: 5,
+    title: "Positive Thinking 'I AM' Affirmations",
+    description:
+      "Empowering 'I AM' statements designed to reshape thoughts, encourage self-belief, and cultivate a strong, positive mindset.",
+    url: "https://youtu.be/14G0pl1-IRQ?si=C5i4EZFXdr1wo8MM",
+    image: require("@/assets/images/affirmations/empowering--i-am--statements-designed-to-reshape-t.png"),
+  },
+  {
+    id: 6,
+    title: "Abundance Affirmations",
+    description:
+      "A set of affirmations to attract prosperity, financial success, and a life filled with unlimited possibilities and opportunities.",
+    url: "https://youtu.be/HmjrC-A5l7o?si=1aPid1T2ZiWUZBKJ",
+    image: require("@/assets/images/affirmations/a-set-of-affirmations-to-attract-prosperity--finan.png"),
+  },
+  {
+    id: 7,
+    title: "Self Love Affirmations",
+    description:
+      "Affirmations that nurture self-acceptance, compassion, and appreciation, fostering a deep sense of love and respect for oneself.",
+    url: "https://youtu.be/_eU3nHz_e34?si=w_1Hole-erO2C0x1",
+    image: require("@/assets/images/affirmations/affirmations-that-nurture-self-acceptance--compass.png"),
+  },
+  {
+    id: 8,
+    title: "Self Worth, Value, and Respect Affirmations",
+    description:
+      "Encouraging affirmations to reinforce personal worth, set healthy boundaries, and inspire self-respect and dignity.",
+    url: "https://youtu.be/e35HHbd25ho?si=rCI9n2xDD-gckuWh",
+    image: require("@/assets/images/affirmations/encouraging-affirmations-to-reinforce-personal-wor.png"),
+  },
+  {
+    id: 9,
+    title: "Self Concept Affirmations",
+    description:
+      "Affirmations crafted to help reshape self-identity, enhance self-esteem, and align personal beliefs with confidence and success.",
+    url: "https://youtu.be/-wKJB-bSpL4?si=TZ8Qa1LwJgZe10kz",
+    image: require("@/assets/images/affirmations/affirmations-crafted-to-help-reshape-self-identity.png"),
+  },
+  {
+    id: 10,
+    title: "Mental Clarity Affirmations",
+    description:
+      "Focused affirmations to improve concentration, clear mental fog, and promote a sharp, peaceful, and organized mind.",
+    url: "https://youtu.be/U1bl5QslMLk?si=zoYw-HuKfueS9aSN",
+    image: require("@/assets/images/affirmations/focused-affirmations-to-improve-concentration--cle.png"),
+  },
+];
+
+export const songs: Song[] = [
+  {
+    title: "400HZ",
+    src: require("@/assets/music/400HZ.mp3"),
+    pic: require("@/assets/music/images/400hz.png"),
+  },
+  {
+    title: "432HZ",
+    src: require("@/assets/music/432HZMeditation.mp3"),
+    pic: require("@/assets/music/images/432hz-meditation.png"),
+  },
+  {
+    title: "Calming Music",
+    src: require("@/assets/music/CalmingMusic.mp3"),
+    pic: require("@/assets/music/images/calming-music.png"),
+  },
+  {
+    title: "Classical Music",
+    src: require("@/assets/music/ClassicalMusic.mp3"),
+    pic: require("@/assets/music/images/classical-music.png"),
+  },
+  {
+    title: "Deep Music",
+    src: require("@/assets/music/DeepMusic.mp3"),
+    pic: require("@/assets/music/images/deep-music.png"),
+  },
+  {
+    title: "Meditation Music",
+    src: require("@/assets/music/MeditationMusic.mp3"),
+    pic: require("@/assets/music/images/meditation-music.png"),
+  },
+  {
+    title: "Meditation Piano",
+    src: require("@/assets/music/MeditationPiano.mp3"),
+    pic: require("@/assets/music/images/meditation-piano.png"),
+  },
+  {
+    title: "Most Relaxing Piano",
+    src: require("@/assets/music/MostRelaxingPiano.mp3"),
+    pic: require("@/assets/music/images/most-relaxing-piano.png"),
+  },
+  {
+    title: "Music Mindfulness",
+    src: require("@/assets/music/MusicMindfulness.mp3"),
+    pic: require("@/assets/music/images/music-mindfulness.png"),
+  },
+  {
+    title: "Peaceful Instrumental Piano",
+    src: require("@/assets/music/PeacefulInstrumentalPiano.mp3"),
+    pic: require("@/assets/music/images/peaceful-instrumental-piano.png"),
+  },
+  {
+    title: "Relaxing Acoustic Guitar",
+    src: require("@/assets/music/RelaxingAcousticGuitar.mp3"),
+    pic: require("@/assets/music/images/relaxing-acoustic-guitar.png"),
+  },
+  {
+    title: "Relaxing Background Music",
+    src: require("@/assets/music/RelaxingBackgroundMusic.mp3"),
+    pic: require("@/assets/music/images/relaxing-background-music.png"),
+  },
+  {
+    title: "Relaxing Classic Guitar",
+    src: require("@/assets/music/RelaxingClassicGuitar.mp3"),
+    pic: require("@/assets/music/images/relaxing-classic-guitar.png"),
+  },
+  {
+    title: "Relaxing Music and Alarm",
+    src: require("@/assets/music/RelaxingMusicAndAlarm.mp3"),
+    pic: require("@/assets/music/images/relaxing-music-and-alarm.png"),
+  },
+  {
+    title: "Relaxing Power Nap",
+    src: require("@/assets/music/RelaxingPowerNap.mp3"),
+    pic: require("@/assets/music/images/relaxing-power-nap.png"),
+  },
+  {
+    title: "Relaxing Romantic Music",
+    src: require("@/assets/music/RelaxingRomanticMusic.mp3"),
+    pic: require("@/assets/music/images/relaxing-romantic-music.png"),
+  },
+  {
+    title: "Soft Music",
+    src: require("@/assets/music/SoftMusic.mp3"),
+    pic: require("@/assets/music/images/softmusic.png"),
+  },
+  {
+    title: "Soft Piano",
+    src: require("@/assets/music/SoftPiano.mp3"),
+    pic: require("@/assets/music/images/soft-piano.png"),
+  },
+  {
+    title: "Super Deep Meditation",
+    src: require("@/assets/music/SuperDeepMeditation.mp3"),
+    pic: require("@/assets/music/images/super-deep-meditation.png"),
+  },
+  {
+    title: "Walk with him",
+    src: require("@/assets/music/WalkWithHim.mp3"),
+    pic: require("@/assets/music/images/walk-with-him.png"),
+  },
+];
 
 type NotificationStatus = "success" | "error" | "info" | "warning";
 type Option = { value: string; label: string };

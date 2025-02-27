@@ -17,15 +17,31 @@ type CustomHeaderProps = {
   navigation: DrawerNavigationProp<any, any>;
 };
 
+const getGreeting = () => {
+  const currentHour = new Date().getHours();
+
+  if (currentHour < 12) {
+    return "Good Morning";
+  } else if (currentHour < 18) {
+    return "Good Afternoon";
+  } else {
+    return "Good Evening";
+  }
+};
 const CustomHeader = ({ navigation }: CustomHeaderProps) => {
   const user = useAppSelector((state: RootState) => state.auth.user);
 
   return (
     <View className="pr-4 pt-10 pb-5 flex flex-row-reverse justify-between items-center bg-[#FAFAFA]">
       {/* Profile Picture */}
+
       <TouchableOpacity onPress={() => navigation.openDrawer()}>
         <ProfilePicture name={user.data?.name} imageUrl="" size={40} />
       </TouchableOpacity>
+      <View className="flex   w-1/2 px-5 ">
+        <Text className="text-xl font-bold">{`${getGreeting()}!`}</Text>
+        <Text className="text-left font-extralight">{user.data?.name} </Text>
+      </View>
     </View>
   );
 };
@@ -132,7 +148,8 @@ const Layout = () => {
       screenOptions={{
         header: (props) => <CustomHeader {...props} />, // Use the custom header
         drawerContentStyle: { backgroundColor: "#1F1F1F" }, // Drawer background color
-        drawerStyle: { backgroundColor: "#141414" }, // Optional: Make the drawer background black
+        drawerStyle: { backgroundColor: "#141414" },
+        drawerPosition: "right",
       }}
       drawerContent={(props) => <CustomDrawerContent {...props} />} // Use custom drawer content
     ></Drawer>

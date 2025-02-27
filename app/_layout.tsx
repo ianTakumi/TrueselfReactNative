@@ -4,7 +4,7 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-
+import FloatingMusicPlayer from "@/components/user/FloatingMusicPlayer";
 import { createNotifications } from "react-native-notificated";
 
 import { useFonts } from "expo-font";
@@ -83,7 +83,8 @@ export default function RootLayout() {
               options={{ headerShown: false }}
             />
           </Stack>
-          <StatusBar style="auto" />
+          <StatusBar style="light" />
+          <FloatingMusicPlayer />
         </NotificationsProvider>
       </GestureHandlerRootView>
     </Provider>

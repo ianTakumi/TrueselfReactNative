@@ -29,6 +29,7 @@ export default function Layout() {
         name="AnxietyResults"
         options={{ headerShown: false, animation: "simple_push" }}
       />
+      <Stack.Screen name="SingleAffirmation" options={{ headerShown: false }} />
     </Stack>
   );
 }
