@@ -4,7 +4,6 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import FloatingMusicPlayer from "@/components/user/FloatingMusicPlayer";
 import { createNotifications } from "react-native-notificated";
 
 import { useFonts } from "expo-font";
@@ -17,8 +16,9 @@ import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import "react-native-reanimated";
-
+import { MusicProvider } from "./contexts/MusicContext";
 import "@/global.css";
+
 const { NotificationsProvider } = createNotifications();
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -53,40 +53,47 @@ export default function RootLayout() {
 
   return (
     <Provider store={store}>
-      <GestureHandlerRootView>
-        <NotificationsProvider>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="users" options={{ headerShown: false }} />
-            <Stack.Screen name="admin" options={{ headerShown: false }} />
-            <Stack.Screen name="+not-found" />
-            <Stack.Screen name="login" options={{ headerShown: false }} />
-            <Stack.Screen name="index" options={{ headerShown: false }} />
-            <Stack.Screen name="getStarted" options={{ headerShown: false }} />
-            <Stack.Screen name="register" options={{ headerShown: false }} />
-            <Stack.Screen
-              name="forgotPassword"
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="resetPassword"
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen name="verifyCode" options={{ headerShown: false }} />
-            <Stack.Screen name="profile" options={{ headerShown: false }} />
-            <Stack.Screen
-              name="updateProfile"
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="AllAnxietyResults"
-              options={{ headerShown: false }}
-            />
-          </Stack>
-          <StatusBar style="light" />
-          <FloatingMusicPlayer />
-        </NotificationsProvider>
-      </GestureHandlerRootView>
+      <MusicProvider>
+        <GestureHandlerRootView>
+          <NotificationsProvider>
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen name="users" options={{ headerShown: false }} />
+              <Stack.Screen name="admin" options={{ headerShown: false }} />
+              <Stack.Screen name="+not-found" />
+              <Stack.Screen name="login" options={{ headerShown: false }} />
+              <Stack.Screen name="index" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="getStarted"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen name="register" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="forgotPassword"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="resetPassword"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="verifyCode"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen name="profile" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="updateProfile"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="AllAnxietyResults"
+                options={{ headerShown: false }}
+              />
+            </Stack>
+            <StatusBar style="light" />
+          </NotificationsProvider>
+        </GestureHandlerRootView>
+      </MusicProvider>
     </Provider>
   );
 }

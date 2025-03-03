@@ -40,6 +40,7 @@ const SingleMood = () => {
   const user = useAppSelector((state) => state.auth.user);
   const userId = user.data?._id;
   const router = useRouter();
+
   const fetchMood = async () => {
     try {
       const response = await AxiosInstance.get(`/moodEntries/${id}/${userId}`);
@@ -52,7 +53,6 @@ const SingleMood = () => {
       setLoading(false);
     }
   };
-
 
   const deleteMood = async () => {
     try {
@@ -134,7 +134,19 @@ const SingleMood = () => {
       <View className="mt-auto space-y-3">
         {/* Delete Button with Back Icon beside it */}
         <View className="flex-row space-x-3">
-          <TouchableOpacity className="flex-1 p-3 rounded-xl border-2 border-purple-500 bg-purple-50 shadow-md active:bg-purple-200" onPress={() => router.push({ pathname: "/users/EditMood", params: { id } })}
+          <TouchableOpacity
+            className="flex-1 p-3 rounded-xl border-2 border-purple-500 bg-purple-50 shadow-md active:bg-purple-200"
+            onPress={() =>
+              router.push({
+                pathname: "/users/MoodForm",
+                params: {
+                  id: mood._id,
+                  mood: mood.mood,
+                  note: mood.note,
+                  createdAt: mood.createdAt,
+                },
+              })
+            }
           >
             <Text className="text-black text-center font-bold">Edit</Text>
           </TouchableOpacity>

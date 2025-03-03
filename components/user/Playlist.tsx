@@ -1,42 +1,12 @@
-import { ScrollView, Text, Image, TouchableOpacity, View } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
-import { Audio } from "expo-av";
-import { useState } from "react";
+import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
+import { useMusic } from "@/app/contexts/MusicContext";
 import { songs } from "@/utils/helpers";
-import { setSong, setIsPlaying } from "@/app/redux/slices/SongSlice";
-import { RootState } from "@/app/redux/store";
 
 export default function Playlist() {
-  const dispatch = useDispatch();
-  const { currentSong } = useSelector((state: RootState) => state.musicPlayer);
-  const [sound, setSound] = useState<Audio.Sound | null>(null);
-
-  const playSound = async (song: any) => {
-    if (currentSong?.title === song.title) {
-      return;
-    }
-
-    if (sound) {
-      await sound.stopAsync();
-      await sound.unloadAsync();
-      setSound(null);
-    }
-
-    const { sound: newSound } = await Audio.Sound.createAsync(song.src);
-    setSound(newSound);
-    dispatch(setSong(song)); // Update Redux state with the current song
-    dispatch(setIsPlaying(true)); // Set playing status to true
-    await newSound.playAsync();
-
-    newSound.setOnPlaybackStatusUpdate((status) => {
-      if (status.isLoaded && status.didJustFinish) {
-        dispatch(setIsPlaying(false));
-      }
-    });
-  };
+  const { playSound } = useMusic();
 
   return (
-    <ScrollView horizontal className="my-5">
+    <ScrollView horizontal className="my-5 px-4">
       {songs.map((song, index) => (
         <TouchableOpacity
           key={index}

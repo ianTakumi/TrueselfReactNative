@@ -18,6 +18,7 @@ import { useForm, Controller } from "react-hook-form";
 import AxiosInstance from "@/utils/AxiosInstance";
 import Playlist from "@/components/user/Playlist";
 import Affirmations from "@/components/user/Affirmations";
+import FloatingMusicPlayer from "@/components/user/FloatingMusicPlayer";
 interface MoodNoteForm {
   note: string;
 }
@@ -58,7 +59,7 @@ export default function IndexPage() {
   };
 
   return (
-    <ScrollView className="flex-1 px-4 bg-[#FAFAFA]">
+    <ScrollView className="flex-1 px-4 bg-[#FAFAFA] pb-28">
       <View className="flex flex-col items-center justify-center mt-5">
         <Text className="font-light text-xl">How do you feel today?</Text>
 
@@ -90,11 +91,12 @@ export default function IndexPage() {
           <Playlist />
         </View>
       </ScrollView>
+      <FloatingMusicPlayer />
 
       <View className="mb-10">
         <Affirmations />
       </View>
-      {/* Mood Note Modal */}
+
       <Modal
         visible={modalVisible}
         transparent={true}

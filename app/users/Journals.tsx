@@ -13,6 +13,7 @@ import RenderHTML from "react-native-render-html";
 import { useAppSelector } from "../redux/hooks";
 import { JournalEntry } from "../redux/types/JournalEntry.type";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 
 type SortOrder = "newest" | "oldest";
 
@@ -23,6 +24,7 @@ const Journals: React.FC = () => {
   const user = useAppSelector((state) => state.auth.user);
   const userId = user.data?._id;
   const { width } = useWindowDimensions();
+  const router = useRouter();
 
   const fetchJournalEntries = async (): Promise<void> => {
     try {
@@ -107,6 +109,12 @@ const Journals: React.FC = () => {
             sortedEntries.map((entry) => (
               <TouchableOpacity
                 key={entry._id}
+                onPress={() =>
+                  router.push({
+                    pathname: "/users/SingleJournal",
+                    params: { id: entry._id },
+                  })
+                }
                 className="bg-white p-4 mb-4 rounded-lg shadow-sm border border-gray-200"
               >
                 <Text className="text-lg font-semibold text-black">
@@ -125,7 +133,7 @@ const Journals: React.FC = () => {
           )}
         </ScrollView>
       )}
-      <TouchableOpacity className="absolute bottom-12 right-6 bg-purple-600 p-4 rounded-full shadow-lg active:bg-purple-800">
+      <TouchableOpacity className="absolute bottom-12 right-6 bg-purple-600 p-4 rounded-full shadow-lg active:bg-purple-800"  onPress={() => router.push("/users/JournalForm")}>
         <MaterialIcons name="add" size={28} color="white" />
       </TouchableOpacity>
     </SafeAreaView>

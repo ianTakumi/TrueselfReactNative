@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,81 +7,50 @@ import {
   TextInput,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-
-interface Option {
-  value: string | number;
-  label: string;
-}
-
-interface Question {
-  key: string;
-  label: string;
-  type: "select" | "number";
-  options?: Option[];
-}
-
-const jobOptions: Option[] = [
-  { value: "student", label: "Student" },
-  { value: "engineer", label: "Engineer" },
-  { value: "teacher", label: "Teacher" },
-  { value: "unemployed", label: "Unemployed" },
-  { value: "other", label: "Other" },
-];
-
-const yesNoOptions: Option[] = [
-  { value: 1, label: "Yes" },
-  { value: 0, label: "No" },
-];
-
-const scale1to5Options: Option[] = Array.from({ length: 5 }, (_, i) => ({
-  value: i + 1,
-  label: (i + 1).toString(),
-}));
-
-const scale1to10Options: Option[] = Array.from({ length: 10 }, (_, i) => ({
-  value: i + 1,
-  label: (i + 1).toString(),
-}));
-
-const questions: Question[] = [
-  {
-    key: "jobRole",
-    label: "1. What's your occupation?",
-    type: "select",
-    options: jobOptions,
-  },
-  {
-    key: "sleepDuration",
-    label: "2. How many hours do you sleep per day?",
-    type: "number",
-  },
-  {
-    key: "exerciseMinutes",
-    label: "3. How many minutes do you exercise per week?",
-    type: "number",
-  },
-  {
-    key: "caffeineIntake",
-    label: "4. What is your daily caffeine intake (mg)?",
-    type: "number",
-  },
-  {
-    key: "smoking",
-    label: "5. Do you currently smoke?",
-    type: "select",
-    options: yesNoOptions,
-  },
-  {
-    key: "dietQuality",
-    label: "6. On a scale of 1 to 10, how would you rate your overall diet?",
-    type: "select",
-    options: scale1to10Options,
-  },
-];
+import { Audio } from "expo-av";
+import { translations, audioFiles } from "@/utils/helpers";
 
 const AnxietyTest: React.FC = () => {
+  const [language, setLanguage] = useState<"en" | "tg">("en");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [answers, setAnswers] = useState<Record<string, string | number>>({});
+  const [sound, setSound] = useState<Audio.Sound | null>(null);
+
+  const questions = translations[language].questions;
+
+  const playAudio = async () => {
+    if (sound) {
+      await sound.stopAsync();
+      await sound.unloadAsync();
+    }
+
+    const questionNumber = currentQuestionIndex + 1;
+    const audioSource = audioFiles[language]?.[questionNumber];
+
+    if (!audioSource) {
+      console.error("Audio file not found");
+      return;
+    }
+
+    try {
+      const { sound: newSound } = await Audio.Sound.createAsync(audioSource, {
+        shouldPlay: true,
+      });
+      setSound(newSound);
+      await newSound.playAsync();
+    } catch (error) {
+      console.error("Error playing audio:", error);
+    }
+  };
+
+  useEffect(() => {
+    playAudio();
+    return () => {
+      if (sound) {
+        sound.unloadAsync();
+      }
+    };
+  }, [currentQuestionIndex, language]);
 
   const handleNext = () => {
     if (currentQuestionIndex < questions.length - 1) {
@@ -99,6 +68,11 @@ const AnxietyTest: React.FC = () => {
     setAnswers({ ...answers, [key]: value });
   };
 
+  const handleLanguageChange = (selectedLanguage: "en" | "tg") => {
+    setLanguage(selectedLanguage);
+    setCurrentQuestionIndex(0);
+  };
+
   const currentQuestion = questions[currentQuestionIndex];
 
   return (
@@ -109,6 +83,16 @@ const AnxietyTest: React.FC = () => {
       >
         Anxiety Test
       </Text>
+
+      {/* Language Selector */}
+      <View className="w-full mb-4">
+        <Text className="text-lg mb-2">Select Language / Piliin ang Wika:</Text>
+        <Picker selectedValue={language} onValueChange={handleLanguageChange}>
+          <Picker.Item label="English" value="en" />
+          <Picker.Item label="Tagalog" value="tg" />
+        </Picker>
+      </View>
+
       <View className="w-full bg-white p-4 rounded-lg shadow-md">
         <Text className="text-lg mb-2">{currentQuestion.label}</Text>
         {currentQuestion.type === "select" && currentQuestion.options ? (
@@ -118,7 +102,7 @@ const AnxietyTest: React.FC = () => {
               handleAnswer(currentQuestion.key, itemValue)
             }
           >
-            {currentQuestion.options.map((option) => (
+            {currentQuestion.options.map((option: any) => (
               <Picker.Item
                 key={option.value}
                 label={option.label}
@@ -140,6 +124,7 @@ const AnxietyTest: React.FC = () => {
           />
         )}
       </View>
+
       <View className="flex-row mt-4 space-x-4">
         {currentQuestionIndex > 0 && (
           <TouchableOpacity

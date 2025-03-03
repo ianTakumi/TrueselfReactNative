@@ -88,7 +88,7 @@ const Moods = () => {
       <ScrollView className="mt-5">
         {moodEntries.length === 0 ? (
           <Text className="text-center text-gray-500 mt-5">
-            No journal entries found.
+            No mood entries found.
           </Text>
         ) : (
           <ScrollView className="mt-5">

@@ -16,6 +16,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { JournalEntry } from "@/app/redux/types/JournalEntry.type";
 import AxiosInstance from "@/utils/AxiosInstance";
 import RenderHTML from "react-native-render-html";
+import { useRouter } from "expo-router";
 
 type SortOrder = "newest" | "oldest";
 
@@ -27,6 +28,7 @@ const Diary = () => {
   const { width } = useWindowDimensions();
   const user = useAppSelector((state) => state.auth.user);
   const userId = user.data?._id;
+  const router = useRouter();
 
   const fetchJournalEntries = async (): Promise<void> => {
     try {
@@ -170,7 +172,7 @@ const Diary = () => {
         )}
       </ScrollView>
 
-      <TouchableOpacity className="absolute bottom-20 right-5 bg-purple-600 p-4 rounded-full shadow-lg active:bg-purple-800">
+      <TouchableOpacity className="absolute bottom-20 right-5 bg-purple-600 p-4 rounded-full shadow-lg active:bg-purple-800" onPress={() => router.push("/users/JournalForm")}>
         <MaterialIcons name="add" size={28} color="white" />
       </TouchableOpacity>
     </SafeAreaView>

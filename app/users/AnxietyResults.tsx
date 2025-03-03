@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useAppSelector } from "../redux/hooks";
-import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AnxietyPrediction } from "../redux/types/AnxietyPrediction.type";
@@ -49,15 +48,9 @@ const AnxietyResults = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-[#F4F6FA]">
-      {/* Header */}
-      <LinearGradient
-        colors={["#B8E8F2", "#BFEFE3"]}
-        className="p-6 rounded-b-3xl shadow-lg"
-      >
-        <Text className="text-3xl font-bold text-gray-700">
-          Anxiety Results
-        </Text>
-      </LinearGradient>
+      <Text className="text-3xl font-bold text-gray-700 px-8 mt-10 py-4">
+        Anxiety Results
+      </Text>
 
       {/* Sort Button */}
       <View className="flex-row justify-end mt-4 mr-4">
@@ -99,6 +92,12 @@ const AnxietyResults = () => {
             return (
               <TouchableOpacity
                 key={result._id}
+                onPress={() =>
+                  router.push({
+                    pathname: "/users/SingleAnxietyResult",
+                    params: { id: result._id },
+                  })
+                }
                 className="bg-white p-5 mb-4 rounded-2xl shadow-lg border border-gray-200"
               >
                 <View className="flex-row justify-between items-center">
@@ -135,7 +134,10 @@ const AnxietyResults = () => {
       </ScrollView>
 
       {/* Floating Add Button */}
-      <TouchableOpacity className="absolute bottom-8 right-8 bg-purple-600 p-4 rounded-full shadow-lg active:bg-purple-800">
+      <TouchableOpacity
+        className="absolute bottom-8 right-8 bg-purple-600 p-4 rounded-full shadow-lg active:bg-purple-800"
+        onPress={() => router.push("/users/(drawers)/(tabs)/anxietyTest")}
+      >
         <MaterialIcons name="add" size={28} color="white" />
       </TouchableOpacity>
     </SafeAreaView>

@@ -26,10 +26,16 @@ export default function Layout() {
         options={{ headerShown: false, animation: "simple_push" }}
       />
       <Stack.Screen
+        name="SingleJournal"
+        options={{ headerShown: false, animation: "simple_push" }}
+      />
+      <Stack.Screen
         name="AnxietyResults"
         options={{ headerShown: false, animation: "simple_push" }}
       />
       <Stack.Screen name="SingleAffirmation" options={{ headerShown: false }} />
+      <Stack.Screen name="JournalForm" options={{ headerShown: false }} />
+      <Stack.Screen name="MoodForm" options={{ headerShown: false }} />
     </Stack>
   );
 }
