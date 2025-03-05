@@ -11,8 +11,9 @@ import {
 } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { notifyToast } from "@/utils/helpers";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import AxiosInstance from "@/utils/AxiosInstance";
 
 type FormData = {
   newPassword: string;
@@ -28,22 +29,31 @@ const ResetPassword = () => {
     reset,
   } = useForm<FormData>();
   const router = useRouter();
-
+  const { token } = useLocalSearchParams();
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     const { newPassword, confirmPassword } = data;
 
-    if (newPassword !== confirmPassword) {
-      notifyToast("Error", "Passwords do not match", "error");
-      return;
-    }
+    const cleanedData = {
+      password: newPassword,
+      confirmPassword,
+    };
 
-    notifyToast("Success", "Password has been reset successfully", "success");
-    reset();
-
-    setTimeout(() => router.push("/login"), 1500);
+    await AxiosInstance.post(`/auth/resetPassword/${token}`, cleanedData).then(
+      (res) => {
+        if (res.status === 200) {
+          notifyToast(
+            "Success",
+            "Password has been reset successfully",
+            "success"
+          );
+          reset();
+          setTimeout(() => router.push("/login"), 1500);
+        }
+      }
+    );
   };
 
   return (
@@ -110,8 +120,11 @@ const ResetPassword = () => {
             name="confirmPassword"
             rules={{
               required: "Please confirm your password",
-              validate: (value) =>
-                value === watch("newPassword") || "Passwords do not match",
+              validate: (value) => {
+                return (
+                  value === watch("newPassword") || "Passwords do not match"
+                );
+              },
             }}
             render={({ field: { onChange, value } }) => (
               <View className="relative shadow-sm">

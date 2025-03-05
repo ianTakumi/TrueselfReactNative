@@ -61,6 +61,10 @@ export default function RootLayout() {
               <Stack.Screen name="users" options={{ headerShown: false }} />
               <Stack.Screen name="admin" options={{ headerShown: false }} />
               <Stack.Screen name="+not-found" />
+              <Stack.Screen
+                name="verifyEmail"
+                options={{ headerShown: false }}
+              />
               <Stack.Screen name="login" options={{ headerShown: false }} />
               <Stack.Screen name="index" options={{ headerShown: false }} />
               <Stack.Screen

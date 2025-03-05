@@ -18,6 +18,7 @@
     "@expo/server": "^0.5.1",
     "@expo/vector-icons": "^14.0.2",
     "@react-native-async-storage/async-storage": "1.23.1",
+    "@react-native-community/datetimepicker": "8.2.0",
     "@react-native-picker/picker": "2.9.0",
     "@react-navigation/bottom-tabs": "^7.2.0",
     "@react-navigation/drawer": "^7.1.1",
@@ -47,7 +48,6 @@
     "react-hook-form": "^7.54.2",
     "react-native": "0.76.7",
     "react-native-calendars": "^1.1309.1",
-    "react-native-date-picker": "^5.0.10",
     "react-native-dropdown-select-list": "^2.0.5",
     "react-native-gesture-handler": "~2.20.2",
     "react-native-notificated": "^0.1.7",
@@ -57,7 +57,6 @@
     "react-native-screens": "~4.4.0",
     "react-native-skeleton-content": "^1.0.28",
     "react-native-svg": "15.8.0",
-    "react-native-ui-datepicker": "^3.0.4",
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.5",
     "react-redux": "^9.2.0"

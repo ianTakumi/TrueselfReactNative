@@ -13,15 +13,17 @@ import { useForm, Controller } from "react-hook-form";
 import { FontAwesome } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { SelectList } from "react-native-dropdown-select-list";
-import DateTimePicker, { getDefaultStyles } from "react-native-ui-datepicker";
-import DatePicker from "react-native-date-picker";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 import {
   genderIdentityOptions,
   sexualOrientationOptions,
   pronounsOptions,
+  notifyToast,
+  isValidPhilippineNumber,
 } from "@/utils/helpers";
 import dayjs from "dayjs";
+import AxiosInstance from "@/utils/AxiosInstance";
 
 interface RegisterFormData {
   name: string;
@@ -42,8 +44,6 @@ const Register: React.FC = () => {
     useState<boolean>(false);
   const router = useRouter();
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
-  const defaultStyles = getDefaultStyles();
-  const [open, setOpen] = useState(false);
 
   const {
     control,
@@ -59,6 +59,80 @@ const Register: React.FC = () => {
       confirmPassword: "",
     },
   });
+
+  const onSubmit = async (data: RegisterFormData) => {
+    console.log(data);
+
+    await AxiosInstance.post("/auth/registerMobile", data).then((res) => {
+      if (res.status === 201) {
+        notifyToast(
+          "Registration Suc cessful",
+          "You have successfully registered",
+          "success"
+        );
+        router.push({
+          pathname: "/verifyEmail",
+          params: { email: data.email },
+        });
+      }
+    });
+  };
+
+  const checkUniqueEmail = async (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!email) {
+      notifyToast("Email is required", "Please enter your email", "info");
+      return false;
+    }
+
+    if (!emailRegex.test(email)) {
+      notifyToast(
+        "Invalid email format",
+        "Please enter a valid email",
+        "error"
+      );
+      return false;
+    }
+
+    try {
+      const res = await AxiosInstance.get(`/auth/check-email/${email}`);
+
+      if (res.status === 200) {
+        return true;
+      }
+    } catch (error: any) {
+      if (error.response && error.response.status === 409) {
+        return false;
+      }
+    }
+
+    return false;
+  };
+
+  const checkUniquePhoneNumber = async (phoneNumber: string) => {
+    if (!isValidPhilippineNumber(phoneNumber)) {
+      return false;
+    }
+
+    if (!phoneNumber) {
+      notifyToast("Email is required", "Please enter your email", "info");
+      return false;
+    }
+
+    try {
+      const res = await AxiosInstance.get(`/auth/check-phone/${phoneNumber}`);
+
+      if (res.status === 200) {
+        return true;
+      }
+    } catch (error: any) {
+      if (error.response && error.response.status === 409) {
+        return false;
+      }
+    }
+    return false;
+  };
 
   return (
     <ScrollView
@@ -96,6 +170,7 @@ const Register: React.FC = () => {
         <Controller
           control={control}
           name="name"
+          rules={{ required: "Name is required" }}
           render={({ field: { onChange, value } }) => (
             <TextInput
               className=" p-3 border border-gray-300 rounded "
@@ -105,6 +180,9 @@ const Register: React.FC = () => {
             />
           )}
         />
+        {errors.name && (
+          <Text className="text-red-500 mt-1">{errors.name.message}</Text>
+        )}
       </View>
 
       <View className="w-full mb-8">
@@ -112,16 +190,40 @@ const Register: React.FC = () => {
         <Controller
           control={control}
           name="email"
+          rules={{
+            required: "Email is required",
+            pattern: {
+              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+              message: "Invalid email format",
+            },
+            validate: async (value) => {
+              return (await checkUniqueEmail(value)) || "Email already exists";
+            },
+          }}
           render={({ field: { onChange, value } }) => (
             <TextInput
-              className=" p-3 border border-gray-300 rounded "
+              className="p-3 border border-gray-300 rounded"
               placeholder="Email"
               keyboardType="email-address"
               value={value}
-              onChangeText={onChange}
+              onChangeText={async (text) => {
+                onChange(text); // Update form state
+                if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text)) {
+                  await checkUniqueEmail(text); // Check uniqueness only if format is valid
+                }
+              }}
+              onBlur={async () => {
+                if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+                  await checkUniqueEmail(value);
+                }
+              }}
             />
           )}
         />
+
+        {errors.email && (
+          <Text className="text-red-500 mt-1">{errors.email.message}</Text>
+        )}
       </View>
 
       <View className="w-full mb-8">
@@ -131,6 +233,14 @@ const Register: React.FC = () => {
         <Controller
           control={control}
           name="phoneNumber"
+          rules={{
+            required: "Phone Number is required",
+            validate: async (value) => {
+              return (
+                (await checkUniquePhoneNumber(value)) || "Phone already exists"
+              );
+            },
+          }}
           render={({ field: { onChange, value } }) => (
             <TextInput
               className="p-3 border border-gray-300 rounded "
@@ -141,6 +251,11 @@ const Register: React.FC = () => {
             />
           )}
         />
+        {errors.phoneNumber && (
+          <Text className="text-red-500 mt-1">
+            {errors.phoneNumber.message}
+          </Text>
+        )}
       </View>
 
       <View className="w-full mb-8">
@@ -150,37 +265,37 @@ const Register: React.FC = () => {
         <Controller
           control={control}
           name="dob"
-          defaultValue={dayjs().format("YYYY-MM-DD")} // Ensures an initial date value
-          render={({ field: { onChange, value } }) => {
-            // Ensure value is always a Date
-            const selectedDate = value ? new Date(value) : new Date();
+          rules={{ required: "Date of Birth is required" }}
+          render={({ field: { onChange, value } }) => (
+            <>
+              <TouchableOpacity
+                onPress={() => setDatePickerVisible(true)}
+                className="border border-gray-300 p-3 rounded-md"
+              >
+                <Text className={value ? "text-black" : "text-gray-400"}>
+                  {value ? new Date(value).toDateString() : "Select a date"}
+                </Text>
+              </TouchableOpacity>
 
-            return (
-              <>
-                <TouchableOpacity
-                  className="border border-gray-300 p-3 rounded-md"
-                  onPress={() => setOpen(true)}
-                >
-                  <Text className="text-black">
-                    {selectedDate.toDateString()}
-                  </Text>
-                </TouchableOpacity>
-
-                <DatePicker
-                  modal
-                  open={open}
-                  date={selectedDate}
-                  mode="date"
-                  onConfirm={(date: Date) => {
-                    setOpen(false);
-                    onChange(date);
+              {isDatePickerVisible && (
+                <DateTimePicker
+                  value={value ? new Date(value) : new Date()} // Ensure value is a valid Date
+                  onChange={(event, date) => {
+                    setDatePickerVisible(false); // Hide picker after selection
+                    if (date) {
+                      onChange(date.toISOString()); // Save as ISO string to avoid issues
+                    }
                   }}
-                  onCancel={() => setOpen(false)}
+                  display="spinner"
+                  mode="date"
                 />
-              </>
-            );
-          }}
+              )}
+            </>
+          )}
         />
+        {errors.dob && (
+          <Text className="text-red-500 mt-1">{errors.dob.message}</Text>
+        )}
       </View>
 
       <View className="w-full mb-8">
@@ -190,6 +305,7 @@ const Register: React.FC = () => {
         <Controller
           control={control}
           name="genderIdentity"
+          rules={{ required: "Gender Identity is required" }}
           render={({ field: { onChange, value } }) => (
             <SelectList
               data={genderIdentityOptions}
@@ -199,6 +315,11 @@ const Register: React.FC = () => {
             />
           )}
         />
+        {errors.genderIdentity && (
+          <Text className="text-red-500 mt-1">
+            {errors.genderIdentity.message}
+          </Text>
+        )}
       </View>
 
       <View className="w-full mb-8">
@@ -207,6 +328,7 @@ const Register: React.FC = () => {
         </Text>
         <Controller
           control={control}
+          rules={{ required: "Sexual Orientation is required" }}
           name="sexualOrientation"
           render={({ field: { onChange, value } }) => (
             <SelectList
@@ -217,12 +339,18 @@ const Register: React.FC = () => {
             />
           )}
         />
+        {errors.sexualOrientation && (
+          <Text className="text-red-500 mt-1">
+            {errors.sexualOrientation.message}
+          </Text>
+        )}
       </View>
 
       <View className="w-full mb-8">
         <Text className="text-black text-base mb-2 font-bold">Pronouns</Text>
         <Controller
           control={control}
+          rules={{ required: "Pronouns are required" }}
           name="pronouns"
           render={({ field: { onChange, value } }) => (
             <SelectList
@@ -233,6 +361,9 @@ const Register: React.FC = () => {
             />
           )}
         />
+        {errors.pronouns && (
+          <Text className="text-red-500 mt-1">{errors.pronouns.message}</Text>
+        )}
       </View>
 
       <View className="w-full mb-8">
@@ -240,6 +371,7 @@ const Register: React.FC = () => {
         <Controller
           control={control}
           name="password"
+          rules={{ required: "Password is required" }}
           render={({ field: { onChange, value } }) => (
             <View className=" p-3 border border-gray-300 rounded  flex-row items-center">
               <TextInput
@@ -261,6 +393,9 @@ const Register: React.FC = () => {
             </View>
           )}
         />
+        {errors.password && (
+          <Text className="text-red-500 mt-1">{errors.password.message}</Text>
+        )}
       </View>
 
       <View className="w-full mb-8">
@@ -270,6 +405,7 @@ const Register: React.FC = () => {
         <Controller
           control={control}
           name="confirmPassword"
+          rules={{ required: "Confirm Password is required" }}
           render={({ field: { onChange, value } }) => (
             <View className="w-full p-3 border border-gray-300 rounded mb-3 flex-row items-center">
               <TextInput
@@ -293,9 +429,17 @@ const Register: React.FC = () => {
             </View>
           )}
         />
+        {errors.confirmPassword && (
+          <Text className="text-red-500 mt-1">
+            {errors.confirmPassword.message}
+          </Text>
+        )}
       </View>
 
-      <TouchableOpacity className="w-full bg-purple-300 p-4 rounded items-center">
+      <TouchableOpacity
+        className="w-full bg-purple-300 p-4 rounded items-center"
+        onPress={handleSubmit(onSubmit)}
+      >
         <Text className="text-white text-lg">Submit</Text>
       </TouchableOpacity>
 

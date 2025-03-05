@@ -43,7 +43,7 @@ export default function GetStarted() {
           source={require("../assets/images/adaptive-icon.png")}
           style={{ width: 300, height: 300 }}
         />
-        <Text className="text-white text-2xl">Loading...</Text>
+        {/* <Text className="text-white text-2xl">Loading...</Text> */}
       </SafeAreaView>
     );
   }

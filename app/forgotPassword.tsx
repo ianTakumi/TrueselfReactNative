@@ -7,8 +7,10 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useForm, Controller } from "react-hook-form";
-import { notifyToast } from "@/utils/helpers"; // Adjust the path if needed
+import { notifyToast } from "@/utils/helpers";
 import { useRouter } from "expo-router";
+import AxiosInstance from "@/utils/AxiosInstance";
+
 type FormData = {
   email: string;
 };
@@ -21,20 +23,27 @@ const ForgotPassword = () => {
     reset,
   } = useForm<FormData>();
   const router = useRouter();
-  const onSubmit = (data: FormData) => {
-    const { email } = data;
-    router.push("/verifyCode");
-    // Simulate password reset
-    // if (email) {
-    //   notifyToast(
-    //     "Password Reset Sent",
-    //     "Check your email for reset instructions.",
-    //     "success"
-    //   );
-    //   reset();
-    // } else {
-    //   notifyToast("Error", "Something went wrong. Try again later.", "error");
-    // }
+
+  const onSubmit = async (data: FormData) => {
+    await AxiosInstance.post("/auth/resetPasswordMobile", data)
+      .then((res) => {
+        if (res.status === 200) {
+          notifyToast(
+            "Check Your Email",
+            "We've sent you a code to reset your password. Please check your inbox.",
+            "success"
+          );
+          reset();
+          router.push({
+            pathname: "/verifyCode",
+            params: { email: data.email },
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        notifyToast("Error", "Something went wrong. Try again later.", "error");
+      });
   };
 
   return (

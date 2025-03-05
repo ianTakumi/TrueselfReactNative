@@ -3,6 +3,11 @@ import { ImageSourcePropType } from "react-native";
 import { Song } from "@/app/redux/types/Song.type";
 import { Affirmation } from "@/app/redux/types/Affirmations.type";
 
+export const isValidPhilippineNumber = (phoneNumber: string): boolean => {
+  const regex = /^(09\d{9}|\+639\d{9})$/;
+  return regex.test(phoneNumber);
+};
+
 export const audioFiles: Record<"en" | "tg", Record<number, any>> = {
   en: {
     1: require("@/assets/voices/en/1.mp3"),

@@ -9,7 +9,8 @@ import {
   Vibration,
 } from "react-native";
 import { notifyToast } from "@/utils/helpers";
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
+import AxiosInstance from "@/utils/AxiosInstance";
 
 const CODE_LENGTH = 6;
 
@@ -19,7 +20,7 @@ const VerifyCode = () => {
   const [timer, setTimer] = useState(60);
   const inputRefs = useRef<(TextInput | null)[]>([]);
   const router = useRouter();
-
+  const { email } = useLocalSearchParams();
   useEffect(() => {
     if (timer > 0) {
       const countdown = setInterval(() => setTimer((prev) => prev - 1), 1000);
@@ -39,7 +40,7 @@ const VerifyCode = () => {
     }
   };
 
-  const handleVerify = () => {
+  const handleVerify = async () => {
     if (code.includes("")) {
       notifyToast("Error", "Please enter the complete code", "error");
       Vibration.vibrate(200);
@@ -48,17 +49,26 @@ const VerifyCode = () => {
 
     setLoading(true);
     const enteredCode = code.join("");
-
-    setTimeout(() => {
-      setLoading(false);
-      if (enteredCode === "123456") {
-        notifyToast("Success", "Code verified successfully", "success");
-        router.push("/resetPassword");
-      } else {
-        notifyToast("Error", "Invalid verification code", "error");
-        Vibration.vibrate(400);
+    const cleanedData = { otp: enteredCode, email };
+    await AxiosInstance.post("/auth/verifyResetPasswordOTP", cleanedData).then(
+      (res) => {
+        if (res.status === 400) {
+          notifyToast("Error", "Please fill in all fields", "error");
+          Vibration.vibrate(300);
+        } else if (res.status === 409) {
+          notifyToast("Error", "Invalid verification code", "error");
+          Vibration.vibrate(300);
+        } else if (res.status === 410) {
+          notifyToast("Error", "Verification code expired", "error");
+          Vibration.vibrate(300);
+        } else if (res.status === 200) {
+          const token = res.data.token;
+          notifyToast("Success", "Code verified successfully", "success");
+          router.push("/resetPassword");
+          router.push({ pathname: "/resetPassword", params: { token } });
+        }
       }
-    }, 1500);
+    );
   };
 
   const handleResendCode = () => {
