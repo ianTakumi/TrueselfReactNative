@@ -1,7 +1,8 @@
-import axios, { AxiosInstance as AxiosInstanceType } from "axios";
+import axios, { AxiosInstance } from "axios";
 
-const AxiosAIInstance: AxiosInstanceType = axios.create({
-  baseURL: "http://192.168.100.8:4000/api/v1",
+const AxiosAIInstance: AxiosInstance = axios.create({
+  baseURL: "http://192.168.100.8:4000",
+
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",

@@ -111,7 +111,7 @@ const CustomDrawerContent = (props: any) => {
         </View>
         <View>
           <TouchableOpacity
-            onPress={() => router.push("/users/AnxietyResults")}
+            onPress={() => router.push("/users/Result")}
             className="flex flex-row items-center mb-6"
           >
             <FontAwesome6

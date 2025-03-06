@@ -10,10 +10,12 @@ import {
   Keyboard,
 } from "react-native";
 import { Audio } from "expo-av";
-import { translations, audioFiles } from "@/utils/helpers";
+import { translations, audioFiles, getAge, notifyToast } from "@/utils/helpers";
 import { Controller, useForm } from "react-hook-form";
 import { useAppSelector } from "@/app/redux/hooks";
 import { SelectList } from "react-native-dropdown-select-list";
+import AxiosAIInstance from "@/utils/AxiosAIInstance";
+import { useRouter } from "expo-router";
 
 const AnxietyTest: React.FC = () => {
   const [language, setLanguage] = useState<"en" | "tg">("en");
@@ -22,6 +24,7 @@ const AnxietyTest: React.FC = () => {
   const user = useAppSelector((state) => state.auth.user);
   const questions = translations[language].questions;
   const [answers, setAnswers] = useState<Record<string, string | number>>({});
+  const router = useRouter();
 
   const {
     control,
@@ -70,8 +73,64 @@ const AnxietyTest: React.FC = () => {
     };
   }, [currentQuestionIndex, language]);
 
-  const onSubmit = (data: Record<string, string | number>) => {
-    console.log("Form Submitted:", data);
+  const onSubmit = async (data: Record<string, string | number>) => {
+    let occupationEncoding: Record<
+      | "Occupation_Engineer"
+      | "Occupation_Other"
+      | "Occupation_Student"
+      | "Occupation_Teacher"
+      | "Occupation_Unemployed",
+      number
+    > = {
+      Occupation_Engineer: 0,
+      Occupation_Other: 0,
+      Occupation_Student: 0,
+      Occupation_Teacher: 0,
+      Occupation_Unemployed: 0,
+    };
+
+    const selectedOccupation = data.jobRole as string | undefined;
+
+    if (selectedOccupation) {
+      const formattedOccupation = `Occupation_${
+        selectedOccupation.charAt(0).toUpperCase() + selectedOccupation.slice(1)
+      }` as keyof typeof occupationEncoding;
+
+      if (formattedOccupation in occupationEncoding) {
+        occupationEncoding[formattedOccupation] = 1;
+      }
+    }
+
+    const cleannedData = {
+      Age: getAge(user.data?.dob),
+      "Sleep Hours": data.sleepDuration,
+      "Physical Activity (hrs/week)": data.exerciseMinutes,
+      "Caffeine Intake (mg/day)": data.caffeineIntake,
+      "Alcohol Consumption (drinks/week)": data.alcoholIntake,
+      Smoking: data.smoking,
+      "Family History of Anxiety": data.familyAnxiety,
+      "Stress Level (1-10)": data.stressLevel,
+      "Heart Rate (bpm during attack)": data.heartRateAnxiety,
+      "Breathing Rate (breaths/min)": data.breathingRate,
+      "Sweating Level (1-5)": data.sweatingSeverity,
+      Dizziness: data.dizziness,
+      Medication: data.medication,
+      "Therapy Sessions (per month)": data.therapySessions,
+      "Recent Major Life Event": data.lifeEvents,
+      "Diet Quality (1-10)": data.dietQuality,
+      ...occupationEncoding,
+    };
+    console.log(cleannedData);
+    await AxiosAIInstance.post(`/predict/${user.data?._id}`, cleannedData)
+      .then((res) => {
+        console.log(res.data);
+        notifyToast("Prediction Successful", "success", "success");
+        router.push("/users/Result");
+      })
+      .catch((err) => {
+        console.error("Error Response:", err.response?.data || err.message);
+        notifyToast("Prediction Failed", "error", "error");
+      });
   };
 
   const handleNext = () => {

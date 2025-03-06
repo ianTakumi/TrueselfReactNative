@@ -3,6 +3,26 @@ import { ImageSourcePropType } from "react-native";
 import { Song } from "@/app/redux/types/Song.type";
 import { Affirmation } from "@/app/redux/types/Affirmations.type";
 
+export const getAge = (dob: string | Date): number => {
+  const birthDate = new Date(dob);
+  if (isNaN(birthDate.getTime())) {
+    throw new Error("Invalid date format");
+  }
+
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
+
+  if (
+    monthDiff < 0 ||
+    (monthDiff === 0 && today.getDate() < birthDate.getDate())
+  ) {
+    age--;
+  }
+
+  return age;
+};
+
 export const isValidPhilippineNumber = (phoneNumber: string): boolean => {
   const regex = /^(09\d{9}|\+639\d{9})$/;
   return regex.test(phoneNumber);

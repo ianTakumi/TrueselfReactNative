@@ -31,7 +31,11 @@ const updateProfile = () => {
     },
   });
 
-  return <SafeAreaView>updateProfile</SafeAreaView>;
+  return (
+    <SafeAreaView>
+      <Text className="text-black"> Update Profile</Text>
+    </SafeAreaView>
+  );
 };
 
 export default updateProfile;

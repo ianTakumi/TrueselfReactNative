@@ -109,18 +109,16 @@ export default function IndexPage() {
         >
           <View className="bg-white p-6 rounded-2xl w-4/5">
             <Text className="text-lg font-semibold mb-4">
-              Add a note for {selectedMood}
+              Add a note for today's mood
             </Text>
 
-            {/* Controlled TextInput using react-hook-form */}
             <Controller
               control={control}
               name="note"
               rules={{ required: "Note is required" }}
               render={({ field: { onChange, value } }) => (
                 <TextInput
-                  className="border border-gray-300 rounded-lg p-2 h-20"
-                  placeholder="Write your note here..."
+                  className="border border-gray-300 rounded-lg p-2 h-16"
                   multiline
                   value={value}
                   onChangeText={onChange}
