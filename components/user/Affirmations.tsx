@@ -16,6 +16,10 @@ const Affirmations = () => {
   return (
     <View className="flex-1 p-4">
       <Text className="text-xl font-bold text-center mb-4">Affirmations</Text>
+      <Text className="text-center text-gray-600 mb-4">
+        Find calm and confidence with these affirmations!
+      </Text>
+
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -31,7 +35,7 @@ const Affirmations = () => {
               })
             }
             activeOpacity={0.7}
-            className="bg-white overflow-hidden rounded-2xl shadow-lg p-4 w-36"
+            className="bg-white overflow-hidden rounded-2xl shadow-lg p-4 w-36 mr-5"
           >
             {affirmation.image && (
               <Image
@@ -47,12 +51,23 @@ const Affirmations = () => {
             {/* Watch Video Button */}
             <TouchableOpacity
               onPress={(e) => {
-                e.stopPropagation(); // Prevent card click from triggering navigation
+                e.stopPropagation();
                 Linking.openURL(affirmation.url);
               }}
-              className="mt-3 bg-blue-500 py-2 rounded-md items-center"
+              className="mt-4 py-2 rounded-full items-center shadow-lg active:opacity-80"
+              style={{
+                backgroundColor: "#7B61FF",
+                borderWidth: 2,
+                borderColor: "#5A42D1",
+                shadowColor: "#5A42D1",
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: 0.3,
+                shadowRadius: 5,
+              }}
             >
-              <Text className="text-white font-bold">Watch Video</Text>
+              <Text className="text-white font-bold uppercase tracking-wider">
+                Watch Video
+              </Text>
             </TouchableOpacity>
           </TouchableOpacity>
         ))}

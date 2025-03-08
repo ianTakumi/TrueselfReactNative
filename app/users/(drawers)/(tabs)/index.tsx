@@ -9,16 +9,17 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { Audio } from "expo-av";
 import MoodCalendar from "@/components/user/MoodCalendar";
 import { useAppSelector } from "../../../redux/hooks";
 import { RootState } from "../../../redux/store";
-import { moodImages, notifyToast, songs } from "@/utils/helpers";
+import { moodImages, notifyToast, articles } from "@/utils/helpers";
 import { useForm, Controller } from "react-hook-form";
 import AxiosInstance from "@/utils/AxiosInstance";
 import Playlist from "@/components/user/Playlist";
 import Affirmations from "@/components/user/Affirmations";
 import FloatingMusicPlayer from "@/components/user/FloatingMusicPlayer";
+import { Article } from "@/app/redux/types/Articles.type";
+import { useRouter } from "expo-router";
 interface MoodNoteForm {
   note: string;
 }
@@ -28,6 +29,7 @@ export default function IndexPage() {
   const userId = user.data?._id;
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const router = useRouter();
 
   const {
     handleSubmit,
@@ -58,9 +60,16 @@ export default function IndexPage() {
     });
   };
 
+  const todayDate = new Date().toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+
   return (
     <ScrollView className="flex-1 px-4 bg-[#FAFAFA] pb-28">
-      <View className="flex flex-col items-center justify-center mt-5">
+      <View className="flex flex-col items-center justify-center mt-16 mb-1">
+        <Text className="text-lg font-semibold">{todayDate}</Text>
         <Text className="font-light text-xl">How do you feel today?</Text>
 
         <View className="flex-row space-x-4 mt-4">
@@ -79,7 +88,7 @@ export default function IndexPage() {
         </View>
       </View>
 
-      <View className="mt-10">
+      <View className="mt-10 mb-5">
         <MoodCalendar />
       </View>
 
@@ -95,6 +104,35 @@ export default function IndexPage() {
 
       <View className="mb-10">
         <Affirmations />
+      </View>
+
+      <View className="mb-28">
+        <Text className="text-xl font-bold text-center mb-4">
+          Helpful Articles
+        </Text>
+
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {articles.map((article: Article) => (
+            <TouchableOpacity
+              key={article.id}
+              className="bg-white p-4 rounded-2xl shadow-lg mr-4 w-60"
+              onPress={() => router.push({ pathname: article.filename as any })}
+            >
+              <Image
+                source={article.image}
+                className="w-full h-40 rounded-xl"
+                resizeMode="cover"
+              />
+              <Text
+                className="mt-2 text-lg font-semibold text-gray-900"
+                numberOfLines={2} // Limit title to 2 lines
+                ellipsizeMode="tail" // Truncate with ellipsis at the end
+              >
+                {article.title}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
       </View>
 
       <Modal
@@ -135,15 +173,29 @@ export default function IndexPage() {
             <View className="flex-row justify-end space-x-2 mt-4">
               <TouchableOpacity
                 onPress={() => setModalVisible(false)}
-                className="bg-gray-300 px-4 py-2 rounded-lg"
+                className="px-4 py-2 rounded-lg mr-2 active:opacity-70"
+                style={{
+                  backgroundColor: "transparent",
+                  borderWidth: 2,
+                  borderColor: "#63579F",
+                }}
               >
-                <Text>Cancel</Text>
+                <Text className="text-[#63579F] font-bold">Cancel</Text>
               </TouchableOpacity>
+
+              {/* Save Button - Primary Style */}
               <TouchableOpacity
                 onPress={handleSubmit(onSubmit)}
-                className="bg-blue-500 px-4 py-2 rounded-lg"
+                className="px-4 py-2 rounded-lg shadow-md active:opacity-80"
+                style={{
+                  backgroundColor: "#63579F", // Primary Purple
+                  shadowColor: "#4C478B",
+                  shadowOffset: { width: 0, height: 3 },
+                  shadowOpacity: 0.4,
+                  shadowRadius: 4,
+                }}
               >
-                <Text className="text-white">Save</Text>
+                <Text className="text-white font-bold">Save</Text>
               </TouchableOpacity>
             </View>
           </View>

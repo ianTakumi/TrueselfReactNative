@@ -98,10 +98,6 @@ const Login: React.FC = () => {
               name="password"
               rules={{
                 required: "Password is required",
-                minLength: {
-                  value: 6,
-                  message: "Password must be at least 6 characters",
-                },
               }}
               render={({ field: { onChange, value } }) => (
                 <TextInput

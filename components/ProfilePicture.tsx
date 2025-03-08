@@ -30,7 +30,7 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({
           width: size,
           height: size,
           borderRadius: size / 2,
-          backgroundColor: imageUrl ? "transparent" : "#8D67AB", // Conditionally set background color
+          backgroundColor: imageUrl ? "transparent" : "#CA99FF", // Conditionally set background color
         },
       ]}
     >

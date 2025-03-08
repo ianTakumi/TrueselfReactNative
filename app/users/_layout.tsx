@@ -37,6 +37,7 @@ export default function Layout() {
       <Stack.Screen name="JournalForm" options={{ headerShown: false }} />
       <Stack.Screen name="MoodForm" options={{ headerShown: false }} />
       <Stack.Screen name="Result" options={{ headerShown: false }} />
+      <Stack.Screen name="DomesticAbuse" options={{ headerShown: false }} />
     </Stack>
   );
 }

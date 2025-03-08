@@ -20,7 +20,11 @@ const Profile = () => {
       >
         <View className="mx-5">
           <View className="my-10  flex flex-row items-center">
-            <ProfilePicture name={user.data?.name} size={100} />
+            <ProfilePicture
+              name={user.data?.name}
+              imageUrl={user.data?.profile.url}
+              size={100}
+            />
             <View className="ml-5">
               <Text className="text-black font-bold text-2xl mb-1">
                 {user.data?.name || "User"}

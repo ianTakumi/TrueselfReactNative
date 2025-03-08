@@ -36,7 +36,11 @@ const CustomHeader = ({ navigation }: CustomHeaderProps) => {
       {/* Profile Picture */}
 
       <TouchableOpacity onPress={() => navigation.openDrawer()}>
-        <ProfilePicture name={user.data?.name} imageUrl="" size={40} />
+        <ProfilePicture
+          name={user.data?.name}
+          imageUrl={user.data?.profile.url}
+          size={40}
+        />
       </TouchableOpacity>
       <View className="flex   w-1/2 px-5 ">
         <Text className="text-xl font-bold">{`${getGreeting()}!`}</Text>
@@ -65,7 +69,11 @@ const CustomDrawerContent = (props: any) => {
       <TouchableOpacity>
         <Link href="/users/profile">
           <View className="p-4 flex flex-row items-center mt-3">
-            <ProfilePicture name={user.data?.name} imageUrl="" size={50} />
+            <ProfilePicture
+              name={user.data?.name}
+              imageUrl={user.data?.profile.url}
+              size={50}
+            />
             <View className="ml-4">
               <Text className="text-black">{user.data?.name}</Text>
               <Text className="text-gray-400">View profile</Text>
@@ -84,7 +92,7 @@ const CustomDrawerContent = (props: any) => {
             <MaterialIcons
               name="mood"
               size={24}
-              color="#C8A2C8"
+              color="#63579F"
               className="mr-3"
             />
             <Text className="text-black font-bold text-xl">
@@ -101,7 +109,7 @@ const CustomDrawerContent = (props: any) => {
             <MaterialCommunityIcons
               name="notebook-edit"
               size={24}
-              color="#C8A2C8"
+              color="#63579F"
               className="mr-5"
             />
             <Text className="text-black font-bold text-xl ">
@@ -117,7 +125,7 @@ const CustomDrawerContent = (props: any) => {
             <FontAwesome6
               name="brain"
               size={24}
-              color="#C8A2C8"
+              color="#63579F"
               className="mr-5"
             />
             <Text className="text-black font-bold text-xl ">
@@ -131,7 +139,7 @@ const CustomDrawerContent = (props: any) => {
             <AntDesign
               name="logout"
               size={24}
-              color="#C8A2C8"
+              color="#63579F"
               className="mr-5"
             />
             <Text className="text-black font-bold text-xl ">Logout</Text>

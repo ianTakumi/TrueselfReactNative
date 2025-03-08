@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  Animated,
+} from "react-native";
 import { Calendar, DateData } from "react-native-calendars";
 import AxiosInstance from "@/utils/AxiosInstance";
 import { notifyToast } from "@/utils/helpers";
@@ -16,6 +23,7 @@ const MoodCalendar: React.FC = () => {
   const user = useAppSelector((state: RootState) => state.auth.user);
   const userId = user.data?._id;
   const [currentDate, setCurrentDate] = useState(dayjs());
+  const scaleAnim = new Animated.Value(1); // Animation for selection
 
   // Fetch mood data for the selected month & year
   const fetchMoodData = async (month: number, year: number) => {
@@ -47,10 +55,28 @@ const MoodCalendar: React.FC = () => {
     fetchMoodData(month, year);
   }, [currentDate]);
 
+  const handleDayPress = (day: DateData) => {
+    setSelectedDate(day.dateString);
+
+    // Animate the selection
+    Animated.sequence([
+      Animated.timing(scaleAnim, {
+        toValue: 1.2,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+      Animated.timing(scaleAnim, {
+        toValue: 1,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
   return (
-    <View>
+    <View style={styles.container}>
       <Calendar
-        onDayPress={(day: DateData) => setSelectedDate(day.dateString)}
+        onDayPress={handleDayPress}
         markedDates={{
           [selectedDate]: {
             selected: true,
@@ -62,26 +88,72 @@ const MoodCalendar: React.FC = () => {
           selectedDayBackgroundColor: "#6C63FF",
           todayTextColor: "#6C63FF",
           arrowColor: "#6C63FF",
+          textDayFontWeight: "bold",
+          textMonthFontWeight: "bold",
+          textDayHeaderFontSize: 14,
         }}
         dayComponent={({ date }: { date: DateData }) => {
           const moodType = mood[date.dateString];
+          const isSelected = selectedDate === date.dateString;
 
           return (
-            <View style={{ alignItems: "center" }}>
-              <Text>{date.day}</Text>
-              {moodType && (
-                <Image
-                  source={moodImages[moodType]}
-                  style={{ width: 20, height: 20, marginTop: 5 }}
-                  resizeMode="contain"
-                />
-              )}
-            </View>
+            <TouchableOpacity onPress={() => handleDayPress(date)}>
+              <Animated.View
+                style={[
+                  styles.dayContainer,
+                  isSelected && styles.selectedDay,
+                  { transform: [{ scale: isSelected ? scaleAnim : 1 }] },
+                ]}
+              >
+                <Text
+                  style={[styles.dayText, isSelected && styles.selectedDayText]}
+                >
+                  {date.day}
+                </Text>
+                {moodType && (
+                  <Image
+                    source={moodImages[moodType]}
+                    style={styles.moodIcon}
+                    resizeMode="contain"
+                  />
+                )}
+              </Animated.View>
+            </TouchableOpacity>
           );
         }}
       />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 10,
+  },
+  dayContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 8,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+  },
+  selectedDay: {
+    backgroundColor: "#EDEBFF",
+  },
+  dayText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  selectedDayText: {
+    color: "#6C63FF",
+  },
+  moodIcon: {
+    width: 24,
+    height: 24,
+    marginTop: 5,
+  },
+});
 
 export default MoodCalendar;
