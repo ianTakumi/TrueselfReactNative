@@ -157,16 +157,6 @@ const Login: React.FC = () => {
           <Text className="text-red-400 text-center flex-1">Google</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity className="flex-row items-center border border-blue-400 p-3 rounded-md w-full">
-          <FontAwesome
-            name="facebook"
-            size={20}
-            color="blue"
-            className="mr-2"
-          />
-          <Text className="text-blue-400 text-center flex-1">Facebook</Text>
-        </TouchableOpacity>
-
         {/* Register Link */}
         <Text className="text-center text-gray-500 mt-4">
           Don't have an account yet?{" "}

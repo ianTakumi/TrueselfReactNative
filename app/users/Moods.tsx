@@ -7,6 +7,7 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  RefreshControl,
 } from "react-native";
 import { useAppSelector } from "../redux/hooks";
 import { MoodEntry } from "../redux/types/MoodEntry.type";
@@ -39,15 +40,19 @@ const Moods = () => {
   const userId = user.data?._id;
   const router = useRouter();
   const [sortOrder, setSortOrder] = useState<SortOrder>("newest");
+  const [refreshing, setRefreshing] = useState(false);
 
   const fetchMoodEntries = async () => {
     try {
+      setRefreshing(true);
       const response = await AxiosInstance.get(`/moodEntries/${userId}`);
       if (response.status === 200) {
         setMoodEntries(response.data.moodEntries);
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setRefreshing(false);
     }
   };
 

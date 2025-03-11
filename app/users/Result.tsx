@@ -14,6 +14,11 @@ import * as Progress from "react-native-progress";
 import { AnxietyPrediction } from "../redux/types/AnxietyPrediction.type";
 import { useAppSelector } from "../redux/hooks";
 import { getRecommendations, notifyToast } from "@/utils/helpers";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import * as Print from "expo-print";
+import * as Sharing from "expo-sharing";
+import * as FileSystem from "expo-file-system";
 
 type TypeData = {
   name: string;
@@ -30,6 +35,7 @@ const AnxietyResultScreen = () => {
   const [indicators, setIndicators] = useState<TypeData[]>([]);
   const [recommendations, setRecommendations] = useState<string[]>([]);
   const [lifestyleFactors, setLifestyleFactors] = useState<TypeData[]>([]);
+  const router = useRouter();
 
   const fetchAnxietyData = async () => {
     await AxiosInstance.get(
@@ -42,6 +48,337 @@ const AnxietyResultScreen = () => {
       .catch((error) => {
         notifyToast("Error", "Failed to fetch anxiety data", "error");
       });
+  };
+
+  const generatePDF = async () => {
+    console.log(anxietyData);
+    try {
+      const htmlContent = `
+      <html>
+        <head>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              padding: 20px;
+            }
+    
+            p {
+              font-size: 18px;
+            }
+          </style>
+        </head>
+        <body>
+          <div
+            style="
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              flex-direction: column;
+            "
+          >
+            <img src="https://res.cloudinary.com/dco6n59if/image/upload/v1741577926/xx1humsio00muwfinicr.png" 
+                 alt="Anxiety Assessment Logo" 
+                 style="text-align: center" 
+                 height="250" 
+                 width="700" />
+            <h1 style="text-align: center">Anxiety Assessment Report</h1>
+          </div>
+          
+      <div style="padding-left: 20px; padding-right: 20px;">
+        <p><strong>Name:</strong> Lianne Deldacan</p>
+        <p><strong>Date of Assessment:</strong> ${new Date().toLocaleDateString()}</p>
+        <h3>I. Overview</h3>
+        <p>
+          This report summarizes the findings of your recent anxiety assessment. It includes a
+          severity score, potential contributing factors, and tailored recommendations to help you
+          manage and reduce anxiety.
+        </p>
+      </div>
+
+        
+     <div style="padding-left: 20px; padding-right: 20px;">
+  <h3>II. Key Results</h3>
+
+  <div style="display: flex; gap: 10px; margin-bottom: 8px;">
+    <p><strong>Overall Anxiety Severity Score:</strong></p>
+    <p>
+      <strong>${Math.round(anxietyData?.severityScore ?? 0)}/10</strong> 
+      <span>(${
+        (anxietyData?.severityScore ?? 0) > 5
+          ? "Severe Anxiety"
+          : "Mild Anxiety"
+      })</span>
+    </p>
+  </div>
+
+      <div style="display: flex; gap: 10px; margin-bottom: 8px;">
+        <p><strong>Heart Rate:</strong></p>
+        <p>
+          <strong>${anxietyData?.heartRate} bpm</strong> 
+          <span>(Normal: 60–100 bpm)</span>
+        </p>
+      </div>
+
+      <div style="display: flex; gap: 10px; margin-bottom: 8px;">
+        <p><strong>Breathing Rate:</strong></p>
+        <p>
+          <strong>${anxietyData?.breathingRate} breaths/min</strong> 
+          <span>(Normal: 12–20 breaths/min)</span>
+        </p>
+      </div>
+    </div>
+
+
+            
+  
+     <div style="page-break-before: always; padding-left: 20px; padding-right: 20px; margin-top: 25px;">
+  <h3>III. Lifestyle Factors</h3>
+  <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+    <thead>
+      <tr style="background-color: #1e73be; color: white; text-align: left;">
+        <th style="padding: 10px; border: 1px solid #ccc;">Factor</th>
+        <th style="padding: 10px; border: 1px solid #ccc;">Description</th>
+        <th style="padding: 10px; border: 1px solid #ccc;">Recommended Range</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding: 10px; border: 1px solid #ccc;">Caffeine Intake</td>
+        <td style="padding: 10px; border: 1px solid #ccc;">${
+          anxietyData?.caffeineIntake
+        } mg</td>
+        <td style="padding: 10px; border: 1px solid #ccc;">Up to 400 milligrams (mg) of caffeine a day appears to be safe for most healthy
+adults. Keep in mind that the actual caffeine content in beverages varies widely,
+especially among energy drinks.</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px; border: 1px solid #ccc;">Alcohol Consumption</td>
+        <td style="padding: 10px; border: 1px solid #ccc;">${
+          anxietyData?.alcoholConsumption
+        } drinks/week</td>
+        <td style="padding: 10px; border: 1px solid #ccc;">For those who consume alcohol, moderation is defined as up to two drinks per day
+for men and one drink per day for women, as recommended by health guidelines</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px; border: 1px solid #ccc;">Sleep Duration</td>
+        <td style="padding: 10px; border: 1px solid #ccc;">${
+          anxietyData?.sleepHours
+        } hours</td>
+        <td style="padding: 10px; border: 1px solid #ccc;">Adequate sleep (7–9 hours per night) is essential for regulating mood and reducing
+stress, both of which play a crucial role in managing anxiety. Chronic sleep
+deprivation can heighten anxiety symptoms by increasing cortisol levels and
+impairing emotional resilience.</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px; border: 1px solid #ccc;">Physical Activity</td>
+        <td style="padding: 10px; border: 1px solid #ccc;">${
+          anxietyData?.physicalActivity
+        } minutes/week</td>
+        <td style="padding: 10px; border: 1px solid #ccc;">Engage in at least 150 min moderate or 75 min vigorous activity per week.</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px; border: 1px solid #ccc;">Smoking</td>
+        <td style="padding: 10px; border: 1px solid #ccc;">${
+          anxietyData?.smokingHabits ? "Yes" : "No"
+        }</td>
+        <td style="padding: 10px; border: 1px solid #ccc;">Quitting smoking improves mental well-being and reduces anxiety.</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px; border: 1px solid #ccc;">Diet Quality</td>
+        <td style="padding: 10px; border: 1px solid #ccc;">${
+          anxietyData?.dietQuality
+        }/10</td>
+        <td style="padding: 10px; border: 1px solid #ccc;">A balanced diet helps regulate mood and reduces anxiety risk.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+ 
+      <div style="padding-left: 20px; padding-right: 20px; margin-top: 25px;">
+        <h2>IV. Health Indicators</h2>
+        <table border="1" cellspacing="0" cellpadding="8" style="border-collapse: collapse; width: 100%;">
+          <thead>
+              <tr style="background-color: #1e73be; color: white; text-align: left;">
+                <th style="padding: 10px; border: 1px solid #ccc;">Health Indicator</th>
+                <th style="padding: 10px; border: 1px solid #ccc;">Value</th>
+                <th style="padding: 10px; border: 1px solid #ccc;">Recommended Range</th>
+              </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Heart Rate</td>
+              <td>${anxietyData?.heartRate} bpm</td>
+              <td>
+                  A normal resting heart rate for adults ranges from 60 to 100 beats per minute (bpm),
+                with lower rates often indicating better cardiovascular fitness. During anxiety or stress,
+                the heart rate can temporarily rise to 100–160 bpm due to the body's fight-or-flight
+                response. Consistently elevated heart rates may be linked to chronic anxiety and
+                stress-related health issues
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Breathing Rate
+              </td>
+              <td>
+                ${anxietyData?.breathingRate} breaths/min
+              </td>
+              <td>
+                The normal respiratory rate for adults is 12–20 breaths per minute (bpm) at rest.
+                Breathing rates can increase during anxiety or panic attacks, leading to
+                hyperventilation, dizziness, and chest tightness. Slow, deep breathing techniques can
+                help regulate breathing patterns, reduce anxiety symptoms, and promote relaxation.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Stress Level
+              </td>
+              <td>
+                ${anxietyData?.stressLevel}/10
+              </td>
+              <td>
+                Stress levels can vary based on individual experiences, coping mechanisms, and
+                environmental factors. Chronic stress and high stress levels can contribute to anxiety
+                disorders, depression, and other health conditions. Effective stress management
+                techniques include mindfulness, relaxation exercises, physical activity, and social
+                support.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Sweating Level
+              </td>
+              <td>
+                ${anxietyData?.sweatingLevel}/5
+              </td>
+              <td>
+                Excessive sweating can be triggered by anxiety, stress, hormonal imbalances, or
+                medical conditions. While sweating is a normal bodily response to regulate
+                temperature, profuse sweating unrelated to physical exertion may indicate an
+                underlying health issue or anxiety disorder.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Dizziness
+              </td>
+              <td>
+                ${anxietyData?.dizziness ? "Yes" : "No"}
+              </td>
+              <td>
+                Dizziness can result from various factors, including anxiety, dehydration, low blood
+                sugar, inner ear problems, or medication side effects. Persistent or recurrent dizziness
+                should be evaluated by a healthcare professional to determine the underlying cause
+                and appropriate treatment.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Family History
+              </td>
+              <td>
+                ${anxietyData?.familyHistory ? "Yes" : "No"}
+              </td>
+              <td>
+                A family history of anxiety or mental health disorders can increase an individual's risk of
+                developing similar conditions due to genetic and environmental factors. Understanding
+                family medical history can help identify potential risk factors and guide preventive
+                measures and treatment options.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Medication
+              </td>
+              <td>
+                ${anxietyData?.medication ? "Yes" : "No"}
+              </td>
+              <td>
+                Medication can be prescribed to manage anxiety symptoms, particularly in cases of
+                severe or persistent anxiety disorders. It is essential to follow your healthcare provider's
+                recommendations regarding medication use, dosage, and potential side effects.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Therapy Sessions  
+              </td>
+              <td>
+                ${anxietyData?.therapySessions} sessions
+              </td>
+              <td>
+                Therapy sessions, such as cognitive-behavioral therapy (CBT), mindfulness-based
+                stress reduction (MBSR), or exposure therapy, can help individuals develop coping
+                strategies, improve emotional regulation, and address underlying issues contributing to
+                anxiety. Regular therapy sessions provide a supportive environment for exploring
+                thoughts, emotions, and behavioral patterns.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+        
+     
+<div style="padding-left: 20px; padding-right: 20px; margin-top: 25px;">
+<h2>V. Other Factors</h2>
+        <table border="1" cellspacing="0" cellpadding="8" style="border-collapse: collapse; width: 100%;">
+          <thead>
+            <tr style="background-color: #2078C7; color: white;">
+              <th>Factor</th>
+              <th>Value</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Occupation</td>
+              <td>${anxietyData?.occupation}</td>
+              <td>Occupational stress can contribute to anxiety symptoms. It is essential to establish a healthy work-life balance, set boundaries, and practice stress management techniques to reduce work-related stress and prevent burnout.</td>
+            </tr>
+            <tr>
+              <td>Recent Major Life Event</td>
+              <td>${anxietyData?.recentMajorLifeEvent ? "Yes" : "No"}</td>
+              <td>Major life events, such as job loss, divorce, relocation, or bereavement, can trigger or exacerbate anxiety symptoms. Seeking social support, professional counseling, or therapy can help individuals cope with the emotional impact of significant life changes.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2 style="margin-top:20px;">VI. Detailed Recommendations</h2>
+        <ul className="list-disc pl-5 mt-2">
+         ${recommendations
+           .map((rec) => `<li style="margin-bottom: 8px;">${rec}</li>`)
+           .join("")}
+        </ul>
+
+       <p><strong style="font-size: 14px;">Disclaimer:</strong><br>
+        <span style="font-size: 12px;">
+        This report is based on research findings; however, consulting a qualified healthcare professional is strongly recommended for accurate diagnosis and personalized medical advice. This information is for general awareness and should not replace professional medical consultation.
+        </span>
+        </p>
+
+</div>
+
+       
+
+        </body>
+      </html>
+    `;
+
+      // Create PDF
+      const { uri } = await Print.printToFileAsync({ html: htmlContent });
+      console.log("PDF saved to:", uri);
+
+      // Save file locally
+      const fileUri = `${FileSystem.documentDirectory}Hospital_Recommendation.pdf`;
+      await FileSystem.moveAsync({ from: uri, to: fileUri });
+
+      // Share the PDF
+      await Sharing.shareAsync(fileUri);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -121,7 +458,7 @@ const AnxietyResultScreen = () => {
         },
         {
           name: "Therapy Sessions",
-          value: anxietyData.theraphySession ?? 0,
+          value: anxietyData.therapySessions ?? 0,
           icon: "user-md",
         },
         {
@@ -458,6 +795,35 @@ const AnxietyResultScreen = () => {
           </Text>
         )}
       </View>
+
+      {/* Downloaded result pdf */}
+      <TouchableOpacity
+        onPressIn={() => generatePDF()}
+        className="border border-red-500 flex-row items-center justify-center gap-x-2 py-3 px-6 mx-6 mt-4 mb-10"
+        onPress={() => {
+          // Download PDF
+        }}
+      >
+        <MaterialCommunityIcons name="file-outline" size={24} color="#DC2626" />
+        <Text className="font-bold text-lg text-red-500">Download Result</Text>
+      </TouchableOpacity>
+
+      {/* View Hospitals */}
+      <TouchableOpacity
+        className="border border-blue-500 flex-row items-center justify-center gap-x-2 py-3 px-6 mx-6 mb-10"
+        onPress={() => {
+          router.push("/users/Recommend");
+        }}
+      >
+        <MaterialCommunityIcons
+          name="hospital-building"
+          size={24}
+          color="#2563EB"
+        />
+        <Text className="font-bold text-lg text-blue-500">
+          View Recommended Hospital
+        </Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };

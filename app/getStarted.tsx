@@ -54,7 +54,8 @@ export default function GetStarted() {
         {/* Logo */}
         <Image
           source={require("../assets/images/logo/trueself5.png")}
-          className="w-40 h-40 mb-10 object-contain"
+          className="w-40 h-40 mb-10"
+          resizeMode="contain" // Siguradong mag-fit nang maayos
         />
 
         {/* App Title */}

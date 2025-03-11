@@ -15,7 +15,7 @@ export interface AnxietyPrediction {
   sweatingLevel: number;
   dizziness: number;
   medication: number;
-  theraphySession: number;
+  therapySessions: number;
   recentMajorLifeEvent: number;
   dietQuality: number;
   occupation: string;

@@ -32,9 +32,7 @@ const CustomHeader = ({ navigation }: CustomHeaderProps) => {
   const user = useAppSelector((state: RootState) => state.auth.user);
 
   return (
-    <View className="pr-4 pt-10 pb-5 flex flex-row-reverse justify-between items-center bg-[#FAFAFA]">
-      {/* Profile Picture */}
-
+    <View className="pr-4 pt-10 pb-5 mt-3  flex flex-row-reverse justify-between items-center bg-[#FAFAFA]">
       <TouchableOpacity onPress={() => navigation.openDrawer()}>
         <ProfilePicture
           name={user.data?.name}
@@ -64,6 +62,7 @@ const CustomDrawerContent = (props: any) => {
   return (
     <ScrollView
       {...props}
+      className="mt-10"
       contentContainerStyle={{ flexGrow: 1, backgroundColor: "#FAFAFA" }}
     >
       <TouchableOpacity>

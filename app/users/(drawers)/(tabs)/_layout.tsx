@@ -32,15 +32,19 @@ export default function TabLayout() {
         tabBarStyle: isKeyboardVisible
           ? { display: "none" }
           : {
-              position: "absolute",
               borderTopWidth: 0,
-              elevation: 0,
-              backgroundColor: "transparent",
+              elevation: 5,
+              backgroundColor: "rgba(255, 255, 255, 0.9)",
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.1,
+              shadowRadius: 5,
             },
         tabBarActiveTintColor: "#63579F",
         tabBarInactiveTintColor: "gray",
+        tabBarShowLabel: false,
         tabBarBackground: () => (
-          <BlurView intensity={30} tint="light" style={{ flex: 1 }} />
+          <BlurView intensity={50} tint="light" style={{ flex: 1 }} />
         ),
       }}
     >
@@ -49,9 +53,8 @@ export default function TabLayout() {
         options={{
           title: "Home",
           headerShown: false,
-          tabBarLabel: "•",
           tabBarIcon: ({ color }) => (
-            <Entypo name="home" size={24} color={color} />
+            <Entypo name="home" size={28} color={color} />
           ),
         }}
       />
@@ -60,9 +63,8 @@ export default function TabLayout() {
         options={{
           title: "Search",
           headerShown: false,
-          tabBarLabel: "•",
           tabBarIcon: ({ color }) => (
-            <AntDesign name="search1" size={24} color={color} />
+            <AntDesign name="search1" size={28} color={color} />
           ),
         }}
       />
@@ -71,9 +73,8 @@ export default function TabLayout() {
         options={{
           title: "Your Journal",
           headerShown: false,
-          tabBarLabel: "•",
           tabBarIcon: ({ color }) => (
-            <SimpleLineIcons name="notebook" size={24} color={color} />
+            <SimpleLineIcons name="notebook" size={28} color={color} />
           ),
         }}
       />
@@ -82,9 +83,8 @@ export default function TabLayout() {
         options={{
           title: "Mood Tracker",
           headerShown: false,
-          tabBarLabel: "•",
           tabBarIcon: ({ color }) => (
-            <MaterialIcons name="mood" size={24} color={color} />
+            <MaterialIcons name="mood" size={28} color={color} />
           ),
         }}
       />
@@ -93,9 +93,8 @@ export default function TabLayout() {
         options={{
           title: "Anxiety Test",
           headerShown: false,
-          tabBarLabel: "•",
           tabBarIcon: ({ color }) => (
-            <FontAwesome6 name="face-tired" size={24} color={color} />
+            <FontAwesome6 name="face-tired" size={28} color={color} />
           ),
         }}
       />

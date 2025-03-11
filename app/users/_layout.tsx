@@ -38,6 +38,8 @@ export default function Layout() {
       <Stack.Screen name="MoodForm" options={{ headerShown: false }} />
       <Stack.Screen name="Result" options={{ headerShown: false }} />
       <Stack.Screen name="DomesticAbuse" options={{ headerShown: false }} />
+      <Stack.Screen name="Recommend" options={{ headerShown: false }} />
+      <Stack.Screen name="ChangePassword" options={{ headerShown: false }} />
     </Stack>
   );
 }

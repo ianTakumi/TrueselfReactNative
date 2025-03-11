@@ -5,9 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
-  SafeAreaView,
   ScrollView,
-  Modal,
 } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { FontAwesome } from "@expo/vector-icons";
@@ -22,7 +20,7 @@ import {
   notifyToast,
   isValidPhilippineNumber,
 } from "@/utils/helpers";
-import dayjs from "dayjs";
+
 import AxiosInstance from "@/utils/AxiosInstance";
 
 interface RegisterFormData {
@@ -151,11 +149,6 @@ const Register: React.FC = () => {
       <TouchableOpacity className="flex-row items-center border border-red-400 p-3 rounded-md mb-3 w-full">
         <FontAwesome name="google" size={20} color="red" className="mr-2" />
         <Text className="text-red-400 text-center flex-1">Google</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity className="flex-row items-center border border-blue-400 p-3 rounded-md w-full mb-5">
-        <FontAwesome name="facebook" size={20} color="blue" className="mr-2" />
-        <Text className="text-blue-400 text-center flex-1">Facebook</Text>
       </TouchableOpacity>
 
       <View className="flex-row items-center my-8 w-full">
