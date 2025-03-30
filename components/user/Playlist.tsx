@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
 import { useMusic } from "@/app/contexts/MusicContext";
 import { songs } from "@/utils/helpers";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 export default function Playlist() {
   const { playSound } = useMusic();
@@ -22,7 +23,7 @@ export default function Playlist() {
                 </Text>
               </View>
               <TouchableOpacity onPress={() => playSound(song)}>
-                <Text className="text-gray-600 text-lg">▶️</Text>
+                <FontAwesome name="play-circle" size={24} color="#CA99FF" />
               </TouchableOpacity>
             </View>
           </View>

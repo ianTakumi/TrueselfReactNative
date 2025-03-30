@@ -64,7 +64,7 @@ export default function TabLayout() {
           title: "Search",
           headerShown: false,
           tabBarIcon: ({ color }) => (
-            <AntDesign name="search1" size={28} color={color} />
+            <FontAwesome6 name="people-group" size={24} color={color} />
           ),
         }}
       />

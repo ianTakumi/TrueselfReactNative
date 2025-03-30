@@ -78,7 +78,7 @@ export default function GetStarted() {
         {/* Get Started Button */}
         <TouchableOpacity
           className="bg-[#D6A9D1] py-3 px-6 rounded-2xl"
-          onPress={() => router.push("/login")} // Navigate to login screen
+          onPress={() => router.push("/login")}
         >
           <Text
             className="text-white font-bold text-lg text-center"

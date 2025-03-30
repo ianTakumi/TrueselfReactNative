@@ -3,6 +3,37 @@ import { ImageSourcePropType } from "react-native";
 import { Song } from "@/app/redux/types/Song.type";
 import { Affirmation } from "@/app/redux/types/Affirmations.type";
 import { Article } from "@/app/redux/types/Articles.type";
+import { Post } from "@/app/redux/types/Post.type";
+
+export const sendPushNotification = async (
+  title: string,
+  body: string,
+  expoPushToken: string,
+  status: string,
+  post: Post
+) => {
+  try {
+    const message = {
+      to: expoPushToken,
+      sound: "default",
+      title: title,
+      body: body,
+      data: { postId: post._id },
+    };
+
+    await fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Accept-Encoding": "gzip, deflate",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(message),
+    });
+  } catch (error) {
+    console.error("Failed to send notification:", error);
+  }
+};
 
 export const getRecommendations = (data: any) => {
   const recommendations = [];

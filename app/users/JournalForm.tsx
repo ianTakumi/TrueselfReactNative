@@ -29,7 +29,7 @@ const JournalForm = () => {
       : null;
   const router = useRouter();
   const user = useAppSelector((state) => state.auth.user);
-
+  console.log(journal);
   const {
     control,
     handleSubmit,
@@ -48,6 +48,23 @@ const JournalForm = () => {
         .then((res) => {})
         .catch((err) => {});
     } else {
+      const formattedContent = `<p>${data.content}</p>`;
+
+      const payload = {
+        title: data.title,
+        content: formattedContent,
+      };
+
+      await AxiosInstance.post(`/journalEntries/${user.data?._id}`, payload)
+        .then((res) => {
+          notifyToast("Success", "Journal entry created", "success");
+        })
+        .catch((err) => {
+          console.log(err);
+          notifyToast("Error", "An error occurred", "error");
+        });
+      console.log(data);
+      console.log("Create new journal entry");
     }
     router.push("/users/Journals");
   };
@@ -85,7 +102,35 @@ const JournalForm = () => {
         )}
       </View>
 
-      <View className="mt-10"></View>
+      <View className="mt-10">
+        <Text className="text-black font-bold text-lg mb-2">Content</Text>
+        <Controller
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              className="border border-gray-300 px-4 py-3 rounded-lg mb-3"
+              placeholder="Content"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              multiline
+              numberOfLines={4}
+            />
+          )}
+          name="content"
+          rules={{ required: "Content is required" }}
+        />
+        {errors.content && (
+          <Text className="text-red-500">{errors.content.message}</Text>
+        )}
+      </View>
+
+      <TouchableOpacity
+        className="border py-3 rounded-lg mt-4 border-purple-500"
+        onPress={handleSubmit(onSubmit)}
+      >
+        <Text className="text-center text-slate-700">Save</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };

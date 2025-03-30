@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/logo/splash/icon.png",
-    "scheme": "myapp",
+    "scheme": "com.anonymous.mobile",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -16,7 +16,8 @@
         "foregroundImage": "./assets/logo/splash/adaptive.png",
         "backgroundColor": "#F8F9FA"
       },
-      "package": "com.anonymous.mobile"
+      "package": "com.anonymous.mobile",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",
@@ -25,7 +26,6 @@
     },
     "plugins": [
       "expo-router",
-
       [
         "expo-splash-screen",
         {
@@ -34,10 +34,20 @@
           "resizeMode": "contain",
           "backgroundColor": "#F8F9FA"
         }
-      ]
+      ],
+      "@react-native-google-signin/google-signin"
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "2372370f-a87a-4ef3-9a24-23bb085515b0"
+      }
+    },
+    "owner": "ian_takumi"
   }
 }

@@ -2,6 +2,8 @@ import { View, Text, TouchableOpacity, Image } from "react-native";
 import { useMusic } from "@/app/contexts/MusicContext";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 export default function MusicPlayer() {
   const { togglePlayPause, stopMusic } = useMusic();
@@ -18,10 +20,16 @@ export default function MusicPlayer() {
         <Text className="font-semibold">{currentSong.title}</Text>
       </View>
       <TouchableOpacity onPress={togglePlayPause}>
-        <Text className="text-xl">{isPlaying ? "⏸️" : "▶️"}</Text>
+        <Text className="text-xl">
+          {isPlaying ? (
+            <FontAwesome5 name="pause-circle" size={24} color="#CA99FF" />
+          ) : (
+            <FontAwesome name="play-circle" size={24} color="#CA99FF" />
+          )}
+        </Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={stopMusic} className="ml-3">
-        <Text className="text-xl">⏹️</Text>
+        <FontAwesome5 name="stop-circle" size={24} color="#CA99FF" />
       </TouchableOpacity>
     </View>
   );

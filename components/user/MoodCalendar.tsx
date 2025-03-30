@@ -15,7 +15,7 @@ import { RootState } from "@/app/redux/store";
 import { moodImages } from "@/utils/helpers";
 import dayjs from "dayjs";
 
-type MoodData = Record<string, string>; // { "2025-02-26": "Happy", "2025-02-27": "Sad" }
+type MoodData = Record<string, string>;
 
 const MoodCalendar: React.FC = () => {
   const [mood, setMood] = useState<MoodData>({});

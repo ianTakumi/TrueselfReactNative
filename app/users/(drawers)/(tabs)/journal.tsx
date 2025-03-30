@@ -154,6 +154,12 @@ const Diary = () => {
           sortedEntries.map((entry) => (
             <TouchableOpacity
               key={entry._id}
+              onPress={() =>
+                router.push({
+                  pathname: "/users/SingleJournal",
+                  params: { id: entry._id },
+                })
+              }
               className="bg-white p-4 mb-4 rounded-lg shadow-sm border border-gray-200"
             >
               <Text className="text-lg font-semibold text-black">
@@ -172,7 +178,10 @@ const Diary = () => {
         )}
       </ScrollView>
 
-      <TouchableOpacity className="absolute bottom-20 right-5 bg-purple-600 p-4 rounded-full shadow-lg active:bg-purple-800" onPress={() => router.push("/users/JournalForm")}>
+      <TouchableOpacity
+        className="absolute bottom-20 right-5 bg-purple-600 p-4 rounded-full shadow-lg active:bg-purple-800"
+        onPress={() => router.push("/users/JournalForm")}
+      >
         <MaterialIcons name="add" size={28} color="white" />
       </TouchableOpacity>
     </SafeAreaView>

@@ -117,7 +117,6 @@ const updateProfile = () => {
 
   return (
     <ScrollView className="flex-1 bg-gray-100">
-      {/* Curved Header */}
       <View className="relative h-56">
         <LinearGradient
           colors={["#E0C3FC", "#8E44AD"]}

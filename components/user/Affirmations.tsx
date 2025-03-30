@@ -48,27 +48,28 @@ const Affirmations = () => {
               {affirmation.title}
             </Text>
 
-            {/* Watch Video Button */}
-            <TouchableOpacity
-              onPress={(e) => {
-                e.stopPropagation();
-                Linking.openURL(affirmation.url);
-              }}
-              className="mt-4 py-2 rounded-full items-center shadow-lg active:opacity-80"
-              style={{
-                backgroundColor: "#7B61FF",
-                borderWidth: 2,
-                borderColor: "#5A42D1",
-                shadowColor: "#5A42D1",
-                shadowOffset: { width: 0, height: 4 },
-                shadowOpacity: 0.3,
-                shadowRadius: 5,
-              }}
-            >
-              <Text className="text-white font-bold uppercase tracking-wider">
-                Watch Video
-              </Text>
-            </TouchableOpacity>
+            <View className="mt-4">
+              <TouchableOpacity
+                onPress={(e) => {
+                  e.stopPropagation();
+                  Linking.openURL(affirmation.url);
+                }}
+                className="py-2 rounded-full items-center shadow-lg active:opacity-80"
+                style={{
+                  backgroundColor: "#7B61FF",
+                  borderWidth: 2,
+                  borderColor: "#5A42D1",
+                  shadowColor: "#5A42D1",
+                  shadowOffset: { width: 0, height: 4 },
+                  shadowOpacity: 0.3,
+                  shadowRadius: 5,
+                }}
+              >
+                <Text className="text-white font-bold uppercase tracking-wider">
+                  Watch Video
+                </Text>
+              </TouchableOpacity>
+            </View>
           </TouchableOpacity>
         ))}
       </ScrollView>

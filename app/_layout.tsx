@@ -5,7 +5,8 @@ import {
 } from "@react-navigation/native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { createNotifications } from "react-native-notificated";
-
+import { NotificationProvider } from "./contexts/NotificationContext";
+import * as Notifications from "expo-notifications";
 import { useFonts } from "expo-font";
 import * as Font from "expo-font";
 import { Provider } from "react-redux";
@@ -20,6 +21,15 @@ import { MusicProvider } from "./contexts/MusicContext";
 import "@/global.css";
 
 const { NotificationsProvider } = createNotifications();
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
 const fetchFonts = () => {
   return Font.loadAsync({
     "Raleway-Regular": require("../assets/fonts/Raleway-VariableFont_wght.ttf"),
@@ -53,51 +63,56 @@ export default function RootLayout() {
 
   return (
     <Provider store={store}>
-      <MusicProvider>
-        <GestureHandlerRootView>
-          <NotificationsProvider>
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="users" options={{ headerShown: false }} />
-              <Stack.Screen name="admin" options={{ headerShown: false }} />
-              <Stack.Screen name="+not-found" />
-              <Stack.Screen
-                name="verifyEmail"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen name="login" options={{ headerShown: false }} />
-              <Stack.Screen name="index" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="getStarted"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen name="register" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="forgotPassword"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="resetPassword"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="verifyCode"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen name="profile" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="updateProfile"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="AllAnxietyResults"
-                options={{ headerShown: false }}
-              />
-            </Stack>
-            <StatusBar style="light" />
-          </NotificationsProvider>
-        </GestureHandlerRootView>
-      </MusicProvider>
+      <NotificationProvider>
+        <MusicProvider>
+          <GestureHandlerRootView>
+            <NotificationsProvider>
+              <Stack>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen name="users" options={{ headerShown: false }} />
+                <Stack.Screen name="admin" options={{ headerShown: false }} />
+                <Stack.Screen name="+not-found" />
+                <Stack.Screen
+                  name="verifyEmail"
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen name="login" options={{ headerShown: false }} />
+                <Stack.Screen name="index" options={{ headerShown: false }} />
+                <Stack.Screen
+                  name="getStarted"
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="register"
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="forgotPassword"
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="resetPassword"
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="verifyCode"
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen name="profile" options={{ headerShown: false }} />
+                <Stack.Screen
+                  name="updateProfile"
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="AllAnxietyResults"
+                  options={{ headerShown: false }}
+                />
+              </Stack>
+              <StatusBar style="light" />
+            </NotificationsProvider>
+          </GestureHandlerRootView>
+        </MusicProvider>
+      </NotificationProvider>
     </Provider>
   );
 }

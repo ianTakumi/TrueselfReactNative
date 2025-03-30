@@ -68,12 +68,7 @@ const Journals: React.FC = () => {
       </Text>
 
       {/* Add Button & Sort Icon with Label */}
-      <View className="flex-row items-center justify-between mt-2 mb-5">
-        {/* Add Button */}
-        <TouchableOpacity className="w-40 p-2 rounded-xl border-2 border-purple-500 bg-purple-50 shadow-md active:bg-purple-200">
-          <Text className="text-black text-center font-bold">Add</Text>
-        </TouchableOpacity>
-
+      <View className="flex-row-reverse items-center justify-between mt-2 mb-5">
         {/* Sort Icon & Label */}
         <View className="flex-row items-center space-x-2">
           <TouchableOpacity
@@ -133,7 +128,10 @@ const Journals: React.FC = () => {
           )}
         </ScrollView>
       )}
-      <TouchableOpacity className="absolute bottom-12 right-6 bg-purple-600 p-4 rounded-full shadow-lg active:bg-purple-800"  onPress={() => router.push("/users/JournalForm")}>
+      <TouchableOpacity
+        className="absolute bottom-12 right-6 bg-purple-600 p-4 rounded-full shadow-lg active:bg-purple-800"
+        onPress={() => router.push("/users/JournalForm")}
+      >
         <MaterialIcons name="add" size={28} color="white" />
       </TouchableOpacity>
     </SafeAreaView>

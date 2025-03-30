@@ -13,6 +13,8 @@ import { useAppSelector } from "@/app/redux/hooks";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
+import LineChart from "@/components/user/charts/LineChart";
+import MoodPieChart from "@/components/user/charts/MoodPieChart";
 
 type SortOrder = "newest" | "oldest";
 type MoodType = "Anxious" | "Happy" | "Sad" | "Angry" | "Neutral";
@@ -47,6 +49,7 @@ const Mood: React.FC = () => {
   const user = useAppSelector((state) => state.auth.user);
   const userId = user?.data?._id;
   const [sortOrder, setSortOrder] = useState<SortOrder>("newest");
+  const [visibleCount, setVisibleCount] = useState(4);
   const router = useRouter();
 
   const fetchMoods = async () => {
@@ -74,37 +77,37 @@ const Mood: React.FC = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-[#FAFAFA]">
-      <View className="p-4 items-center">
-        <Text className="text-xl font-bold text-gray-900">Mood Tracker</Text>
-        <Text className="text-sm text-gray-600 mt-1 text-center">
-          Keep track of your daily emotions and reflect on your well-being.
-        </Text>
-      </View>
-
-      <View className="flex-row-reverse items-center ">
-        <TouchableOpacity
-          onPress={toggleSortOrder}
-          className="p-2 rounded-full bg-gray-100 active:bg-gray-300"
-        >
-          <MaterialIcons
-            name={sortOrder === "newest" ? "arrow-downward" : "arrow-upward"}
-            size={24}
-            color="black"
-          />
-        </TouchableOpacity>
-        <Text className="text-xs text-gray-500">
-          {sortOrder === "newest" ? "Newest First" : "Oldest First"}
-        </Text>
-      </View>
-
-      <ScrollView className="mt-5">
-        {moods.length === 0 ? (
-          <Text className="text-center text-gray-500 mt-5">
-            No mood entries found.
+      <ScrollView>
+        <View className="p-4 items-center">
+          <Text className="text-xl font-bold text-gray-900">Mood Tracker</Text>
+          <Text className="text-sm text-gray-600 mt-1 text-center">
+            Keep track of your daily emotions and reflect on your well-being.
           </Text>
-        ) : (
-          <ScrollView className="px-5 py-10">
-            {sortedEntries.map((entry: MoodEntry) => (
+        </View>
+
+        <View className="flex-row-reverse items-center px-5">
+          <TouchableOpacity
+            onPress={toggleSortOrder}
+            className="p-2 rounded-full bg-gray-100 active:bg-gray-300"
+          >
+            <MaterialIcons
+              name={sortOrder === "newest" ? "arrow-downward" : "arrow-upward"}
+              size={24}
+              color="black"
+            />
+          </TouchableOpacity>
+          <Text className="text-xs text-gray-500 mr-2">
+            {sortOrder === "newest" ? "Newest First" : "Oldest First"}
+          </Text>
+        </View>
+
+        <View className="mt-5 px-5">
+          {moods.length === 0 ? (
+            <Text className="text-center text-gray-500 mt-5">
+              No mood entries found.
+            </Text>
+          ) : (
+            sortedEntries.slice(0, visibleCount).map((entry: MoodEntry) => (
               <TouchableOpacity
                 key={entry._id}
                 onPress={() =>
@@ -144,11 +147,37 @@ const Mood: React.FC = () => {
                   />
                 </LinearGradient>
               </TouchableOpacity>
-            ))}
-          </ScrollView>
-        )}
+            ))
+          )}
+
+          {/* View More Button (Gradually adds 4 entries) */}
+          {moods.length > visibleCount && (
+            <TouchableOpacity
+              onPress={() => setVisibleCount((prev) => prev + 4)}
+              className="mt-3 bg-purple-600 p-3 rounded-xl items-center"
+            >
+              <Text className="text-white font-semibold">View More</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+
+        {/* Analytics Section */}
+        <View className="mt-10 px-5">
+          <Text className="font-bold text-xl">Analytics</Text>
+          <View className="mb-20">
+            <Text className="text-gray-500 text-sm mt-2">
+              View your mood trends and patterns over time.
+            </Text>
+            <LineChart />
+          </View>
+
+          <MoodPieChart />
+        </View>
       </ScrollView>
-      <TouchableOpacity className="absolute bottom-12 right-3 bg-purple-600 p-4 rounded-full shadow-lg active:bg-purple-800" onPress={() => router.push("/users/MoodForm")}>
+      <TouchableOpacity
+        className="absolute bottom-5 right-3 bg-purple-600 p-4 rounded-full shadow-lg active:bg-purple-800"
+        onPress={() => router.push("/users/MoodForm")}
+      >
         <MaterialIcons name="add" size={28} color="white" />
       </TouchableOpacity>
     </SafeAreaView>

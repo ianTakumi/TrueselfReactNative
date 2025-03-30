@@ -40,6 +40,10 @@ export default function Layout() {
       <Stack.Screen name="DomesticAbuse" options={{ headerShown: false }} />
       <Stack.Screen name="Recommend" options={{ headerShown: false }} />
       <Stack.Screen name="ChangePassword" options={{ headerShown: false }} />
+      <Stack.Screen name="SingleCommunity" options={{ headerShown: false }} />
+      <Stack.Screen name="SinglePost" options={{ headerShown: false }} />
+      <Stack.Screen name="EditPost" options={{ headerShown: false }} />
+      <Stack.Screen name="EditJournalForm" options={{ headerShown: false }} />
     </Stack>
   );
 }

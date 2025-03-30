@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -14,10 +14,17 @@ import AxiosInstance from "@/utils/AxiosInstance";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import { saveUser } from "./redux/slices/authSlices";
 import { notifyToast } from "@/utils/helpers";
+import { registerForPushNotificationsAsync } from "../utils/NotificationRegister";
+
+// import * as Google from "expo-auth-session/providers/google";
+// import { makeRedirectUri } from "expo-auth-session";
+// import * as AuthSession from "expo-auth-session";
+// import { GoogleSignin, User } from "@react-native-google-signin/google-signin";
 
 interface LoginFormData {
   email: string;
   password: string;
+  expoPushToken: string;
 }
 
 const Login: React.FC = () => {
@@ -33,9 +40,76 @@ const Login: React.FC = () => {
     defaultValues: { email: "", password: "" },
   });
 
+  // const [request, response, promptAsync] = Google.useAuthRequest({
+  //   clientId:
+  //     "963960399942-4a8fa07vv8al5eps7h3s1ujf941jsd0s.apps.googleusercontent.com",
+  //   scopes: ["profile", "email"],
+  // });
+
+  // useEffect(() => {
+  //   GoogleSignin.configure({
+  //     webClientId:
+  //       "88082402864-3vh119j0eivtmm0v24ulhno23ng3roa2.apps.googleusercontent.com",
+  //   });
+  // }, []);
+
+  // async function onGoogleButtonPress() {
+  //   try {
+  //     console.log("Google button pressed");
+
+  //     // Check if device has Google Play Services
+  //     await GoogleSignin.hasPlayServices({
+  //       showPlayServicesUpdateDialog: true,
+  //     });
+  //     console.log("Google Play Services available");
+
+  //     // Start the sign-in process
+  //     const signInResult = await GoogleSignin.signIn();
+  //     console.log("Sign-in result:", signInResult);
+
+  //     // // Extract the ID token
+  //     // const idToken = signInResult.data?.idToken;
+  //     // console.log("ID Token:", idToken);
+
+  //     // // Check if the ID token is available
+  //     // if (!idToken) {
+  //     //   throw new Error("No ID token found");
+  //     // }
+  //   } catch (error: any) {
+  //     // Enhanced error logging
+  //     console.error("Error during Google sign-in:", error);
+  //     console.error("Error details:", {
+  //       message: error.message,
+  //       code: error.code,
+  //       stack: error.stack,
+  //       originalError: error,
+  //     });
+
+  //     // Handle specific errors
+  //     if (error.code === "DEVELOPER_ERROR") {
+  //       console.error(
+  //         "DEVELOPER_ERROR: Ensure the webClientId and SHA-1 are configured correctly in Firebase."
+  //       );
+  //     } else if (error.code === "SIGN_IN_CANCELLED") {
+  //       console.error(
+  //         "SIGN_IN_CANCELLED: User cancelled the Google sign-in process."
+  //       );
+  //     } else if (error.code === "NETWORK_ERROR") {
+  //       console.error("NETWORK_ERROR: Check your internet connection.");
+  //     } else {
+  //       console.error("An unexpected error occurred.");
+  //     }
+
+  //     // Optionally re-throw for higher-level handling
+  //     throw error;
+  //   }
+  // }
+
   const onSubmit = async (data: LoginFormData) => {
-    console.log("Login Data:", data);
-    await AxiosInstance.post("/auth/login", data).then((res) => {
+    const expoPushToken = await registerForPushNotificationsAsync();
+    data = { ...data, expoPushToken: expoPushToken ?? "" };
+
+    await AxiosInstance.post("/auth/loginMobile", data).then((res) => {
       if (res.status === 200) {
         const user = res.data.user;
         const token = res.data.token;
@@ -146,16 +220,19 @@ const Login: React.FC = () => {
         </TouchableOpacity>
 
         {/* Social Login */}
-        <View className="flex-row items-center my-4 w-full">
+        {/* <View className="flex-row items-center my-4 w-full">
           <View className="flex-1 border-b border-gray-300" />
           <Text className="px-2 text-gray-500">Or</Text>
           <View className="flex-1 border-b border-gray-300" />
-        </View>
+        </View> */}
 
-        <TouchableOpacity className="flex-row items-center border border-red-400 p-3 rounded-md mb-3 w-full">
+        {/* <TouchableOpacity
+          className="flex-row items-center border border-red-400 p-3 rounded-md mb-3 w-full"
+          // onPress={() => onGoogleButtonPress()}
+        >
           <FontAwesome name="google" size={20} color="red" className="mr-2" />
           <Text className="text-red-400 text-center flex-1">Google</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         {/* Register Link */}
         <Text className="text-center text-gray-500 mt-4">

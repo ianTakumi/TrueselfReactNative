@@ -41,7 +41,7 @@ const CustomHeader = ({ navigation }: CustomHeaderProps) => {
         />
       </TouchableOpacity>
       <View className="flex   w-1/2 px-5 ">
-        <Text className="text-xl font-bold">{`${getGreeting()}!`}</Text>
+        <Text className="text-xl font-bold">{getGreeting() + "!"}</Text>
         <Text className="text-left font-extralight">{user.data?.name} </Text>
       </View>
     </View>
@@ -65,12 +65,12 @@ const CustomDrawerContent = (props: any) => {
       className="mt-10"
       contentContainerStyle={{ flexGrow: 1, backgroundColor: "#FAFAFA" }}
     >
-      <TouchableOpacity>
-        <Link href="/users/profile">
+      <Link href="/users/profile" asChild>
+        <TouchableOpacity>
           <View className="p-4 flex flex-row items-center mt-3">
             <ProfilePicture
               name={user.data?.name}
-              imageUrl={user.data?.profile.url}
+              imageUrl={user.data?.profile?.url}
               size={50}
             />
             <View className="ml-4">
@@ -78,71 +78,54 @@ const CustomDrawerContent = (props: any) => {
               <Text className="text-gray-400">View profile</Text>
             </View>
           </View>
-        </Link>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </Link>
+
       <View className="border-b border-[#353535]"></View>
-      <View className="mx-5 my-6 ">
+
+      <View className="mx-5 my-6">
         {/* Mood Entries */}
-        <View className="">
-          <TouchableOpacity
-            onPress={() => router.push("/users/Moods")}
-            className="flex flex-row items-center gap-2 mb-6"
-          >
-            <MaterialIcons
-              name="mood"
-              size={24}
-              color="#63579F"
-              className="mr-3"
-            />
-            <Text className="text-black font-bold text-xl">
-              All Mood Entries
-            </Text>
-          </TouchableOpacity>
-        </View>
+        {/* <TouchableOpacity
+          onPress={() => router.push("/users/Moods")}
+          className="flex flex-row items-center gap-2 mb-6"
+        >
+          <MaterialIcons name="mood" size={24} color="#63579F" />
+          <Text className="text-black font-bold text-xl">All Mood Entries</Text>
+        </TouchableOpacity> */}
 
-        <View>
-          <TouchableOpacity
-            className="flex flex-row items-center mb-6"
-            onPress={() => router.push("/users/Journals")}
-          >
-            <MaterialCommunityIcons
-              name="notebook-edit"
-              size={24}
-              color="#63579F"
-              className="mr-5"
-            />
-            <Text className="text-black font-bold text-xl ">
-              All Journal Entry
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View>
-          <TouchableOpacity
-            onPress={() => router.push("/users/Result")}
-            className="flex flex-row items-center mb-6"
-          >
-            <FontAwesome6
-              name="brain"
-              size={24}
-              color="#63579F"
-              className="mr-5"
-            />
-            <Text className="text-black font-bold text-xl ">
-              All AI Anxiety Test Results
-            </Text>
-          </TouchableOpacity>
-        </View>
+        {/* Journal Entry */}
+        {/* <TouchableOpacity
+          onPress={() => router.push("/users/Journals")}
+          className="flex flex-row items-center mb-6"
+        >
+          <MaterialCommunityIcons
+            name="notebook-edit"
+            size={24}
+            color="#63579F"
+          />
+          <Text className="text-black font-bold text-xl">
+            All Journal Entry
+          </Text>
+        </TouchableOpacity> */}
 
-        <TouchableOpacity onPress={handleLogout}>
-          <View className="flex flex-row items-center">
-            <AntDesign
-              name="logout"
-              size={24}
-              color="#63579F"
-              className="mr-5"
-            />
-            <Text className="text-black font-bold text-xl ">Logout</Text>
-          </View>
+        {/* AI Anxiety Test Results */}
+        <TouchableOpacity
+          onPress={() => router.push("/users/AnxietyResults")}
+          className="flex flex-row items-center mb-6"
+        >
+          <FontAwesome6 name="brain" size={24} color="#63579F" />
+          <Text className="text-black font-bold text-xl">
+            All AI Anxiety Test Results
+          </Text>
+        </TouchableOpacity>
+
+        {/* Logout */}
+        <TouchableOpacity
+          onPress={handleLogout}
+          className="flex flex-row items-center"
+        >
+          <AntDesign name="logout" size={24} color="#63579F" />
+          <Text className="text-black font-bold text-xl ml-3">Logout</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
