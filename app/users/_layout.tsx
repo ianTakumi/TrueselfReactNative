@@ -44,6 +44,10 @@ export default function Layout() {
       <Stack.Screen name="SinglePost" options={{ headerShown: false }} />
       <Stack.Screen name="EditPost" options={{ headerShown: false }} />
       <Stack.Screen name="EditJournalForm" options={{ headerShown: false }} />
+      <Stack.Screen name="Healthcare" options={{ headerShown: false }} />
+      <Stack.Screen name="MentalHealth" options={{ headerShown: false }} />
+      <Stack.Screen name="SelfCare" options={{ headerShown: false }} />
+      <Stack.Screen name="SupportSystem" options={{ headerShown: false }} />
     </Stack>
   );
 }

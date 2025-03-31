@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Keyboard, View } from "react-native";
 import { BlurView } from "expo-blur";
 import Entypo from "@expo/vector-icons/Entypo";
-import AntDesign from "@expo/vector-icons/AntDesign";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";

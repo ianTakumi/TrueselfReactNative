@@ -26,7 +26,7 @@ interface MoodNoteForm {
 
 export default function IndexPage() {
   const user = useAppSelector((state: RootState) => state.auth.user);
-  const userId = user.data?._id;
+  const userId = user.data?._id || "";
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
@@ -128,7 +128,7 @@ export default function IndexPage() {
                 numberOfLines={2} // Limit title to 2 lines
                 ellipsizeMode="tail" // Truncate with ellipsis at the end
               >
-                {article.title}
+                {article.title || ""}
               </Text>
             </TouchableOpacity>
           ))}
@@ -164,9 +164,9 @@ export default function IndexPage() {
               )}
             />
             {/* Validation Error */}
-            {errors.note && (
+            {errors.note?.message && (
               <Text className="text-red-500 text-sm mt-1">
-                {errors.note.message}
+                {errors.note.message || ""}
               </Text>
             )}
 

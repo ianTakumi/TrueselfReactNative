@@ -117,7 +117,7 @@ export const articles: Article[] = [
   {
     id: 3,
     title: " Mental Health and the LGBTQIA+ Community",
-    image: require("@/assets/images/articles/mentalHealth.svg"),
+    image: require("@/assets/images/articles/mentalHealth.png"),
     filename: "/users/MentalHealth",
   },
   {
@@ -128,12 +128,6 @@ export const articles: Article[] = [
   },
   {
     id: 5,
-    title: "LGBTQIA+ Sexual Health Awareness",
-    image: require("@/assets/images/articles/sexualHealth.png"),
-    filename: "/users/SexualHealth",
-  },
-  {
-    id: 6,
     title:
       "Breaking the Silence: Support Systems for LGBTQIA+ Survivors of Domestic Abuse",
     image: require("@/assets/images/articles/supportSystem.png"),
