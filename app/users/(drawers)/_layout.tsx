@@ -107,6 +107,24 @@ const CustomDrawerContent = (props: any) => {
             Support Hotlines
           </Text>
         </TouchableOpacity>
+
+        {/* Mission */}
+        <TouchableOpacity
+          onPress={() => router.push("/users/Mission")}
+          className="flex flex-row items-center mb-6"
+        >
+          <Entypo name="book" size={24} color="#63579F" />
+          <Text className="text-black font-bold text-xl ml-3">Mission</Text>
+        </TouchableOpacity>
+
+        {/* Vision */}
+        <TouchableOpacity
+          onPress={() => router.push("/users/Vision")}
+          className="flex flex-row items-center mb-6"
+        >
+          <Entypo name="book" size={24} color="#63579F" />
+          <Text className="text-black font-bold text-xl ml-3">Vision</Text>
+        </TouchableOpacity>
         {/* Logout */}
         <TouchableOpacity
           onPress={handleLogout}

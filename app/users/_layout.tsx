@@ -49,6 +49,8 @@ export default function Layout() {
       <Stack.Screen name="SelfCare" options={{ headerShown: false }} />
       <Stack.Screen name="SupportSystem" options={{ headerShown: false }} />
       <Stack.Screen name="SupportHotlines" options={{ headerShown: false }} />
+      <Stack.Screen name="Mission" options={{ headerShown: false }} />
+      <Stack.Screen name="Vision" options={{ headerShown: false }} />
     </Stack>
   );
 }
