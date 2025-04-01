@@ -97,6 +97,16 @@ const CustomDrawerContent = (props: any) => {
           </Text>
         </TouchableOpacity>
 
+        {/* Support Hotlines */}
+        <TouchableOpacity
+          onPress={() => router.push("/users/SupportHotlines")}
+          className="flex flex-row items-center mb-6"
+        >
+          <MaterialIcons name="support-agent" size={24} color="#63579F" />
+          <Text className="text-black font-bold text-xl ml-3">
+            Support Hotlines
+          </Text>
+        </TouchableOpacity>
         {/* Logout */}
         <TouchableOpacity
           onPress={handleLogout}
