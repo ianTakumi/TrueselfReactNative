@@ -71,19 +71,19 @@ const CustomDrawerContent = (props: any) => {
         <TouchableOpacity>
           <View className="p-4 flex flex-row items-center mt-3">
             <ProfilePicture
-              name={user.data?.name || ""}
+              name={user.data?.name || "Guest"}
               imageUrl={user.data?.profile?.url || ""}
               size={50}
             />
             <View className="ml-4">
-              <Text className="text-black">{user.data?.name || ""}</Text>
+              <Text className="text-black">{user.data?.name || "Guest"}</Text>
               <Text className="text-gray-400">View profile</Text>
             </View>
           </View>
         </TouchableOpacity>
       </Link>
 
-      <View className="border-b border-[#353535]"></View>
+      <View className="border-b border-[#353535]" />
 
       <View className="mx-5 my-6">
         {/* AI Anxiety Test Results */}
@@ -92,7 +92,7 @@ const CustomDrawerContent = (props: any) => {
           className="flex flex-row items-center mb-6"
         >
           <FontAwesome6 name="brain" size={24} color="#63579F" />
-          <Text className="text-black font-bold text-xl">
+          <Text className="text-black font-bold text-xl ml-3">
             All AI Anxiety Test Results
           </Text>
         </TouchableOpacity>

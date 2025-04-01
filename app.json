@@ -41,6 +41,7 @@
       "typedRoutes": true
     },
     "extra": {
+      "disableWarning": true,
       "router": {
         "origin": false
       },

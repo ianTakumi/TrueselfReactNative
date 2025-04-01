@@ -11,7 +11,7 @@ import { useFonts } from "expo-font";
 import * as Font from "expo-font";
 import { Provider } from "react-redux";
 import store from "./redux/store";
-
+import { LogBox } from "react-native";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
@@ -19,6 +19,7 @@ import { useEffect, useState } from "react";
 import "react-native-reanimated";
 import { MusicProvider } from "./contexts/MusicContext";
 import "@/global.css";
+LogBox.ignoreAllLogs(true);
 
 const { NotificationsProvider } = createNotifications();
 

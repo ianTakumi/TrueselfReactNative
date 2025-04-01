@@ -18,16 +18,15 @@ import { useRouter } from "expo-router";
 import { JournalEntry } from "../redux/types/JournalEntry.type";
 import { WebView } from "react-native-webview";
 import RenderHTML from "react-native-render-html";
+
 const SingleJournal = () => {
   const { id } = useLocalSearchParams();
   const [journal, setJournal] = useState<JournalEntry | null>(null);
   const [loading, setLoading] = useState(false);
-  const [webViewHeight, setWebViewHeight] = useState(100);
   const user = useAppSelector((state) => state.auth.user);
   const userId = user.data?._id;
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const webViewRef = useRef<WebView | null>(null);
 
   const fetchJournal = async () => {
     setLoading(true);
@@ -119,7 +118,7 @@ const SingleJournal = () => {
             className="border-2 border-purple-500 py-3 rounded-lg mb-5"
             onPress={() =>
               router.push({
-                pathname: "/users/EditJournalForm",
+                pathname: "/users/JournalForm",
                 params: {
                   id: journal._id,
                   title: journal.title,

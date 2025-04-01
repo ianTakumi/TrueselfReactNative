@@ -10,17 +10,17 @@ import {
 import React from "react";
 
 type ProfilePictureProps = {
-  name: string;
+  name?: string;
   imageUrl?: string;
   size?: number;
 };
 
 const ProfilePicture: React.FC<ProfilePictureProps> = ({
-  name,
-  imageUrl,
+  name = "?",
+  imageUrl = "",
   size = 30,
 }) => {
-  const firstLetter = name?.charAt(0).toUpperCase();
+  const firstLetter = name?.charAt(0).toUpperCase() || "?"; // Default sa '?' kung wala
 
   return (
     <View
@@ -30,20 +30,20 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({
           width: size,
           height: size,
           borderRadius: size / 2,
-          backgroundColor: imageUrl ? "transparent" : "#CA99FF", // Conditionally set background color
+          backgroundColor: imageUrl ? "transparent" : "#CA99FF",
         },
       ]}
     >
-      {imageUrl ? (
+      {imageUrl.trim() ? ( // Ensure hindi empty string
         <Image
-          source={{ uri: imageUrl }} // Display the user's uploaded image
+          source={{ uri: imageUrl }}
           style={[
             styles.image,
             { width: size, height: size, borderRadius: size / 2 },
           ]}
         />
       ) : (
-        <Text style={[styles.text, { fontSize: size / 2 }]}>{firstLetter}</Text> // Display the first letter if no image is uploaded
+        <Text style={[styles.text, { fontSize: size / 2 }]}>{firstLetter}</Text>
       )}
     </View>
   );
@@ -65,7 +65,7 @@ const styles = StyleSheet.create<Styles>({
     fontWeight: "bold",
   },
   image: {
-    resizeMode: "cover", // Ensures the image scales properly
+    resizeMode: "cover",
   },
 });
 

@@ -6,6 +6,7 @@ import {
   useWindowDimensions,
   TouchableOpacity,
   ScrollView,
+  FlatList,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import axios from "axios";
@@ -88,130 +89,110 @@ const Diary = () => {
 
   return (
     <SafeAreaView className="bg-[#FAFAFA] flex-1 px-4">
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Title & Intro Text */}
-        <View className="flex justify-center items-center p-4">
-          <Text className="text-4xl font-bold text-gray-900">My Diary</Text>
-          <Text className="text-center text-lg text-gray-700 mt-3">
-            Your story matters. Express yourself freely and embrace your true
-            self in a safe space.
-          </Text>
-        </View>
+      <FlatList
+        data={visibleEntries}
+        keyExtractor={(item) => item._id}
+        ListHeaderComponent={
+          <>
+            {/* Title & Intro Text */}
+            <View className="flex justify-center items-center p-4">
+              <Text className="text-4xl font-bold text-gray-900">My Diary</Text>
+              <Text className="text-center text-lg text-gray-700 mt-3">
+                Your story matters. Express yourself freely and embrace your
+                true self in a safe space.
+              </Text>
+            </View>
 
-        <MotiView
-          from={{ opacity: 0.3 }}
-          animate={{ opacity: 1 }}
-          transition={{
-            type: "timing",
-            duration: 700,
-            loop: true,
-            repeatReverse: true,
-          }}
-          className="rounded-2xl shadow-md w-full mt-6"
-        >
-          <LinearGradient
-            colors={["#E3FDFD", "#FFE6FA"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            className="rounded-2xl p-6"
-          >
-            {loading ? (
-              // Skeleton Placeholder for Text
-              <View className="flex justify-center items-center">
-                <MotiView className="h-6 w-3/4 bg-gray-300 rounded-md my-2" />
-                <MotiView className="h-6 w-1/2 bg-gray-300 rounded-md my-2" />
-              </View>
-            ) : (
-              quote && (
-                <View>
-                  <Text className="text-xl font-semibold text-gray-800 italic text-center">
-                    "{quote.content}"
-                  </Text>
-                  <Text className="text-right text-gray-600 mt-3 font-medium">
-                    — {quote.author}
-                  </Text>
-                </View>
-              )
-            )}
-          </LinearGradient>
-        </MotiView>
-
-        {/* Journal list */}
-        <View className="flex-row-reverse items-center justify-between mt-5 mb-5">
-          {/* Sort Icon & Label */}
-          <View className="flex-row items-center space-x-2">
-            <TouchableOpacity
-              onPress={toggleSortOrder}
-              className="p-2 rounded-full bg-gray-100 active:bg-gray-300"
+            {/* Quote */}
+            <MotiView
+              from={{ opacity: 0.3 }}
+              animate={{ opacity: 1 }}
+              transition={{
+                type: "timing",
+                duration: 700,
+                loop: true,
+                repeatReverse: true,
+              }}
+              className="rounded-2xl shadow-md w-full mt-6"
             >
-              <MaterialIcons
-                name={
-                  sortOrder === "newest" ? "arrow-downward" : "arrow-upward"
-                }
-                size={24}
-                color="black"
-              />
-            </TouchableOpacity>
-            <Text className="text-xs text-gray-500">
-              {sortOrder === "newest" ? "Newest First" : "Oldest First"}
-            </Text>
-          </View>
-        </View>
-
-        <View className="mt-1">
-          {visibleEntries.length === 0 ? (
-            <Text className="text-center text-gray-500 mt-5">
-              No journal entries found.
-            </Text>
-          ) : (
-            visibleEntries.map((entry) => (
-              <TouchableOpacity
-                key={entry._id}
-                onPress={() =>
-                  router.push({
-                    pathname: "/users/SingleJournal",
-                    params: { id: entry._id },
-                  })
-                }
-                className="bg-white p-4 mb-4 rounded-lg shadow-sm border border-gray-200"
+              <LinearGradient
+                colors={["#E3FDFD", "#FFE6FA"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                className="rounded-2xl p-6"
               >
-                <Text className="text-lg font-semibold text-black">
-                  {entry.title}
-                </Text>
-
-                {/* WebView for Rendering HTML Content (Truncated) */}
-                <View style={{ height: 150, overflow: "hidden" }}>
-                  <RenderHTML
-                    contentWidth={width ? width - 40 : 300} // Default width kung undefined
-                    source={{ html: entry.content || "" }} // Empty string kung walang content
-                  />
-                </View>
-
-                <Text className="text-gray-400 text-xs mt-2">
-                  Created at: {new Date(entry.createdAt).toLocaleDateString()}
-                </Text>
-              </TouchableOpacity>
-            ))
-          )}
-        </View>
-
-        {/* View More Button */}
-        {visibleCount < sortedEntries.length && (
+                {loading ? (
+                  <View className="flex justify-center items-center">
+                    <MotiView className="h-6 w-3/4 bg-gray-300 rounded-md my-2" />
+                    <MotiView className="h-6 w-1/2 bg-gray-300 rounded-md my-2" />
+                  </View>
+                ) : (
+                  quote && (
+                    <View>
+                      <Text className="text-xl font-semibold text-gray-800 italic text-center">
+                        "{quote.content}"
+                      </Text>
+                      <Text className="text-right text-gray-600 mt-3 font-medium">
+                        — {quote.author}
+                      </Text>
+                    </View>
+                  )
+                )}
+              </LinearGradient>
+            </MotiView>
+          </>
+        }
+        renderItem={({ item }) => (
           <TouchableOpacity
-            onPress={loadMoreEntries}
-            className="my-3 bg-purple-600 p-3 rounded-xl items-center"
+            onPress={() =>
+              router.push({
+                pathname: "/users/SingleJournal",
+                params: { id: item._id },
+              })
+            }
+            className="bg-white p-4 mb-4 rounded-lg shadow-sm border border-gray-200"
           >
-            <Text className="text-white font-semibold">View More</Text>
+            <Text className="text-lg font-semibold text-black">
+              {item.title}
+            </Text>
+
+            {/* WebView for Rendering HTML Content */}
+            <View style={{ height: 150, overflow: "hidden", marginTop: 8 }}>
+              <WebView
+                originWhitelist={["*"]}
+                source={{ html: item.content || "<p>No content available</p>" }}
+                style={{ width: width - 40, height: 150 }}
+                scrollEnabled={false}
+              />
+            </View>
+
+            <Text className="text-gray-400 text-xs mt-2">
+              Created at: {new Date(item.createdAt).toLocaleDateString()}
+            </Text>
           </TouchableOpacity>
         )}
+        ListFooterComponent={
+          <>
+            {/* View More Button */}
+            {visibleCount < sortedEntries.length && (
+              <TouchableOpacity
+                onPress={loadMoreEntries}
+                className="my-3 bg-purple-600 p-3 rounded-xl items-center"
+              >
+                <Text className="text-white font-semibold">View More</Text>
+              </TouchableOpacity>
+            )}
 
-        {/* Pie Chart */}
-        <View className="my-5">
-          <JournalPieChart />
-        </View>
-      </ScrollView>
+            {/* Pie Chart */}
+            <View className="my-5">
+              <JournalPieChart />
+            </View>
+          </>
+        }
+      />
+
       <TouchableOpacity
-        className="absolute bottom-20 right-5 bg-purple-600 p-4 rounded-full shadow-lg active:bg-purple-800"
+        className="absolute bottom-5 right-5 bg-purple-600 p-4 rounded-full shadow-lg active:bg-purple-800"
         onPress={() => router.push("/users/JournalForm")}
       >
         <MaterialIcons name="add" size={28} color="white" />
