@@ -16,7 +16,6 @@ import { Space } from "@/app/redux/types/Space.type";
 import dayjs from "dayjs";
 import { WebView } from "react-native-webview";
 import { Post } from "@/app/redux/types/Post.type";
-import { Video, ResizeMode } from "expo-av";
 import CommunityPost from "@/components/user/CommunityPost";
 import { MaterialIcons } from "@expo/vector-icons";
 
@@ -87,31 +86,37 @@ export default function SingleCommunity() {
               className="w-16 h-16 rounded-lg"
             />
             <View>
-              <Text className="text-xl font-bold ml-3">{community.name}</Text>
-              <Text className="text-gray-500 text-xs ml-3">
+              <Text className="text-xl font-bold ml-3 text-[#63579F]">
+                {community.name}
+              </Text>
+              <Text className="text-gray-500 text-xs ml-3 mt-1">
                 Created: {dayjs(community.createdAt).format("MMMM D, YYYY")}
               </Text>
               {/* Members Count */}
-              <View className=" flex-row items-center ml-3">
-                <Text className="text-lg font-semibold text-gray-800">
+              <View className=" flex-row items-center ml-3 mt-1">
+                <Text className="text-xs font-semibold text-gray-800">
                   Members:
                 </Text>
-                <Text className="text-gray-600 text-lg ml-2">
+                <Text className=" text-xs  text-gray-600  ml-2">
                   {community.members.length}
                 </Text>
               </View>
             </View>
           </View>
           {/* Description */}
-          <Text className="text-gray-600 text-sm">{community.description}</Text>
+          <Text className="text-gray-600 text-sm mt-5">
+            {community.description}
+          </Text>
           {/* Mission */}
           <View className="mt-4">
-            <Text className="text-lg font-semibold text-gray-800">Mission</Text>
+            <Text className="text-lg font-semibold text-[#63579F]">
+              Mission
+            </Text>
             <Text className="text-gray-600 text-sm">{community.mission}</Text>
           </View>
           {/* Rules */}
           <View className="mt-4">
-            <Text className="text-lg font-semibold text-gray-800">Rules</Text>
+            <Text className="text-lg font-semibold text-[#63579F]">Rules</Text>
 
             <WebView
               originWhitelist={["*"]}
@@ -165,7 +170,15 @@ export default function SingleCommunity() {
           <CommunityPost id={id as string} />
         </View>
       </ScrollView>
-      <TouchableOpacity className="absolute bottom-8 right-8 bg-purple-600 p-4 rounded-full shadow-lg active:bg-purple-800">
+      <TouchableOpacity
+        onPress={() =>
+          router.push({
+            pathname: "/users/Postform",
+            params: { communityId: id },
+          })
+        }
+        className="absolute bottom-8 right-8 bg-[#63579F] p-4 rounded-full shadow-lg active:bg-[#4E4080]"
+      >
         <MaterialIcons name="add" size={28} color="white" />
       </TouchableOpacity>
     </SafeAreaView>

@@ -56,10 +56,10 @@ const Affirmations = () => {
                 }}
                 className="py-2 rounded-full items-center shadow-lg active:opacity-80"
                 style={{
-                  backgroundColor: "#7B61FF",
+                  backgroundColor: "#63579F",
                   borderWidth: 2,
-                  borderColor: "#5A42D1",
-                  shadowColor: "#5A42D1",
+                  borderColor: "#3F2B96",
+                  shadowColor: "#3F2B96",
                   shadowOffset: { width: 0, height: 4 },
                   shadowOpacity: 0.3,
                   shadowRadius: 5,

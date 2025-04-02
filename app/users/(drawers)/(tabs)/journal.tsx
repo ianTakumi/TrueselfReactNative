@@ -16,10 +16,10 @@ import { Quote } from "@/app/redux/types/Quote.type";
 import { MaterialIcons } from "@expo/vector-icons";
 import { JournalEntry } from "@/app/redux/types/JournalEntry.type";
 import AxiosInstance from "@/utils/AxiosInstance";
-import RenderHTML from "react-native-render-html";
 import { useRouter } from "expo-router";
 import JournalPieChart from "@/components/user/charts/JournalPieChart";
 import { WebView } from "react-native-webview";
+import JournalLineChart from "@/components/user/charts/JournalLineChart";
 
 type SortOrder = "newest" | "oldest";
 
@@ -113,7 +113,7 @@ const Diary = () => {
                 loop: true,
                 repeatReverse: true,
               }}
-              className="rounded-2xl shadow-md w-full mt-6"
+              className="rounded-2xl shadow-md w-full mt-6 mb-10"
             >
               <LinearGradient
                 colors={["#E3FDFD", "#FFE6FA"]}
@@ -184,8 +184,20 @@ const Diary = () => {
             )}
 
             {/* Pie Chart */}
+
             <View className="my-5">
-              <JournalPieChart />
+              <Text className="font-bold text-xl">Analytics</Text>
+              <Text className="text-gray-600 mb-2">
+                Visualize your journal entries over time.
+              </Text>
+
+              <View className="mt-2 mb-5">
+                <JournalPieChart />
+              </View>
+
+              <View>
+                <JournalLineChart />
+              </View>
             </View>
           </>
         }

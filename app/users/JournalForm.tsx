@@ -16,7 +16,6 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useAppSelector } from "../redux/hooks";
 import { Ionicons } from "@expo/vector-icons";
 import { notifyToast } from "@/utils/helpers";
-import { JournalEntry } from "../redux/types/JournalEntry.type";
 import { useForm, Controller, set } from "react-hook-form";
 import AxiosInstance from "@/utils/AxiosInstance";
 
@@ -35,7 +34,6 @@ export default function App(): JSX.Element {
     }
   }, [content]);
 
-  console.log("Editor Content:", editorContent);
   const {
     control,
     handleSubmit,

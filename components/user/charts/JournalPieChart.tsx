@@ -43,13 +43,13 @@ export default function JournalPieChart() {
   }));
 
   return (
-    <View className="flex justify-center items-center mt-6 bg-white rounded-xl shadow-md p-4">
+    <View className="flex justify-center items-center  bg-white rounded-xl shadow-md p-4">
       {loading ? (
         <ActivityIndicator size="large" color="#6200ea" />
       ) : (
         <>
           <Text className="text-lg font-semibold mb-4">
-            Journal Entries Per Month
+            Journal Entries Distribution
           </Text>
           <PieChart
             data={chartData}

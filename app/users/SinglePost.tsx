@@ -14,6 +14,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   useWindowDimensions,
+  TextInput,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import Comments from "@/components/user/Comments";
@@ -32,6 +33,10 @@ export default function SinglePost() {
   const lastHeight = useRef(300);
   const user = useAppSelector((state) => state.auth.user);
   const userId = user.data?._id;
+  const [commentText, setCommentText] = useState("");
+  const [showCommentInput, setShowCommentInput] = useState(false);
+  const [refreshComments, setRefreshComments] = useState(false);
+
   const fetchData = async () => {
     setLoading(true);
     try {
@@ -89,6 +94,7 @@ export default function SinglePost() {
         }
       });
   };
+
   useEffect(() => {
     fetchData();
   }, [id]);
@@ -101,6 +107,29 @@ export default function SinglePost() {
       </View>
     );
   }
+
+  const handleAddComment = async () => {
+    if (!commentText.trim()) {
+      notifyToast("Error", "Comment cannot be empty", "error");
+      return;
+    }
+
+    await AxiosInstance.post(`/comments/${userId}/${id}`, {
+      content: commentText,
+    })
+      .then((res) => {
+        if (res.status === 201) {
+          notifyToast("Success", "Comment added", "success");
+          setCommentText("");
+          fetchData();
+        }
+      })
+      .catch((err) => {
+        if (err.status === 400) {
+          notifyToast("Error", "Failed to add comment", "error");
+        }
+      });
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-[#FAFAFA] mt-10">
@@ -253,7 +282,10 @@ export default function SinglePost() {
                   </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity className="flex-row items-center px-4 py-2 bg-gray-200 rounded-full">
+                <TouchableOpacity
+                  onPress={() => setShowCommentInput(!showCommentInput)}
+                  className="flex-row items-center px-4 py-2 bg-gray-200 rounded-full"
+                >
                   <AntDesign name="message1" size={20} color="gray" />
                   <Text className="ml-2 text-gray-700 font-semibold">
                     {post?.commentCount}
@@ -261,8 +293,29 @@ export default function SinglePost() {
                 </TouchableOpacity>
               </View>
 
+              {showCommentInput && (
+                <View className="flex-row items-center mt-3 bg-gray-100 p-2 rounded-lg">
+                  <TextInput
+                    value={commentText}
+                    onChangeText={setCommentText}
+                    placeholder="Write a comment..."
+                    className="flex-1 bg-white p-2 rounded-lg"
+                  />
+                  <TouchableOpacity
+                    onPress={handleAddComment}
+                    className="ml-2 p-2 bg-[#63579F] rounded-lg"
+                  >
+                    <Text className="text-white font-semibold">Post</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+
               {/* Comments Component */}
-              <Comments postId={id as string} />
+              <Comments
+                postId={id as string}
+                refresh={refreshComments}
+                setRefresh={setRefreshComments}
+              />
             </View>
           }
         />

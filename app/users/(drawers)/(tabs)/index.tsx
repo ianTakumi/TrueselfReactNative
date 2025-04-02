@@ -115,7 +115,7 @@ export default function IndexPage() {
           {articles.map((article: Article) => (
             <TouchableOpacity
               key={article.id}
-              className="bg-white p-4 rounded-2xl shadow-lg mr-4 w-60"
+              className="bg-[#F2F2F2] mt-4 border border-[#63579F]  p-5 rounded-2xl shadow-lg mr-4 w-60"
               onPress={() => router.push({ pathname: article.filename as any })}
             >
               <Image
@@ -125,8 +125,8 @@ export default function IndexPage() {
               />
               <Text
                 className="mt-2 text-lg font-semibold text-gray-900"
-                numberOfLines={2} // Limit title to 2 lines
-                ellipsizeMode="tail" // Truncate with ellipsis at the end
+                numberOfLines={2}
+                ellipsizeMode="tail"
               >
                 {article.title || ""}
               </Text>

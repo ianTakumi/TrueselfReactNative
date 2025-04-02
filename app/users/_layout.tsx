@@ -51,6 +51,7 @@ export default function Layout() {
       <Stack.Screen name="SupportHotlines" options={{ headerShown: false }} />
       <Stack.Screen name="Mission" options={{ headerShown: false }} />
       <Stack.Screen name="Vision" options={{ headerShown: false }} />
+      <Stack.Screen name="Postform" options={{ headerShown: false }} />
     </Stack>
   );
 }

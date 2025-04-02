@@ -17,6 +17,8 @@ import { notifyToast } from "@/utils/helpers";
 import { FontAwesome } from "@expo/vector-icons";
 import { Post } from "@/app/redux/types/Post.type";
 import Entypo from "@expo/vector-icons/Entypo";
+import { useAppSelector } from "@/app/redux/hooks";
+
 interface CommunityPostProps {
   id: string;
 }
@@ -27,19 +29,55 @@ export default function CommunityPost({ id }: CommunityPostProps) {
   const [webViewHeight, setWebViewHeight] = useState(initialHeight);
   const lastHeight = useRef(initialHeight);
   const router = useRouter();
+  const user = useAppSelector((state) => state.auth.user);
+
+  const fetchPosts = async () => {
+    try {
+      const res = await AxiosInstance.get(`/posts/community/${id}`);
+      setPosts(res.data.data);
+    } catch (err) {
+      console.log(err);
+      notifyToast("Error", "Failed to fetch posts", "error");
+    }
+  };
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const res = await AxiosInstance.get(`/posts/community/${id}`);
-        setPosts(res.data.data);
-      } catch (err) {
-        console.log(err);
-        notifyToast("Error", "Failed to fetch posts", "error");
-      }
-    };
     fetchPosts();
   }, []);
+
+  const handleLike = async (postId: string) => {
+    await AxiosInstance.post(`/posts/like/${postId}`, {
+      userId: user.data?._id,
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          notifyToast("Success", res.data.message, "success");
+          fetchPosts();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        notifyToast("Error", "Failed to like post", "error");
+      });
+  };
+
+  const handleDislike = async (postId: string) => {
+    console.log(postId);
+
+    await AxiosInstance.post(`/posts/dislike/${postId}`, {
+      userId: user.data?._id,
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          notifyToast("Success", res.data.message, "success");
+          fetchPosts();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        notifyToast("Error", "Failed to dislike post", "error");
+      });
+  };
 
   return (
     <SafeAreaView>
@@ -126,7 +164,10 @@ export default function CommunityPost({ id }: CommunityPostProps) {
                 style={{ gap: 10 }}
               >
                 {/* Upvote */}
-                <TouchableOpacity className="flex-row items-center">
+                <TouchableOpacity
+                  className="flex-row items-center"
+                  onPress={() => handleLike(item._id)}
+                >
                   <Entypo name="arrow-with-circle-up" size={24} color="black" />
                   <Text className="ml-2 text-gray-700 font-semibold">
                     {item.likes.length}
@@ -134,7 +175,10 @@ export default function CommunityPost({ id }: CommunityPostProps) {
                 </TouchableOpacity>
 
                 {/* Downvote */}
-                <TouchableOpacity className="flex-row items-center">
+                <TouchableOpacity
+                  className="flex-row items-center"
+                  onPress={() => handleDislike(item._id)}
+                >
                   <Entypo
                     name="arrow-with-circle-down"
                     size={24}

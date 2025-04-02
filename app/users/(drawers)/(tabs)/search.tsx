@@ -8,7 +8,6 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import AxiosInstance from "@/utils/AxiosInstance";
 import { notifyToast } from "@/utils/helpers";
 import { Space } from "@/app/redux/types/Space.type";
@@ -35,17 +34,18 @@ const Search = () => {
 
   return (
     <SafeAreaView className="bg-[#FAFAFA] flex-1 px-4">
-      {/* Communities List */}
+      {/* Header */}
       <View>
-        <Text className="text-lg font-bold">Communities</Text>
+        <Text className="text-lg font-bold text-[#63579F]">Communities</Text>
       </View>
+
       <FlatList
         data={communities}
         keyExtractor={(item) => item._id}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
           <TouchableOpacity
-            className="flex flex-row items-center p-4 bg-white rounded-xl shadow-sm mt-4"
+            className="flex flex-row items-center p-4 bg-[#F2F2F2] rounded-xl shadow-sm mt-4 border border-[#63579F]"
             onPress={() =>
               router.push({
                 pathname: "/users/SingleCommunity",
@@ -58,7 +58,9 @@ const Search = () => {
               className="w-14 h-14 rounded-lg"
             />
             <View className="ml-4 flex-1">
-              <Text className="text-lg font-bold">{item.name}</Text>
+              <Text className="text-lg font-bold text-[#63579F]">
+                {item.name}
+              </Text>
               <Text className="text-xs text-gray-500">
                 Created: {dayjs(item.createdAt).format("MMMM D, YYYY")}
               </Text>

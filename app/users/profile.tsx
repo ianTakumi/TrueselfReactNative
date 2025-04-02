@@ -16,6 +16,7 @@ import AxiosInstance from "@/utils/AxiosInstance";
 import { notifyToast } from "@/utils/helpers";
 import { updateUser } from "../redux/slices/authSlices";
 import ProfilePost from "@/components/user/ProfilePost";
+
 const Profile = () => {
   const user = useAppSelector((state) => state.auth.user);
   const router = useRouter();
@@ -51,9 +52,7 @@ const Profile = () => {
         uri: result.assets[0].uri,
         name: `profilePicture-${user.data?._id}.jpg`,
         type: "image/jpeg",
-      } as any); // Explicitly cast as any to avoid TS errors
-
-      console.log("FormData Debug:", formData);
+      } as any);
 
       try {
         const res = await AxiosInstance.put(
